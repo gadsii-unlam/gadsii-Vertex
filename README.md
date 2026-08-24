@@ -1,7 +1,7 @@
 # Vertex
 
-Integrantes: [nombre 1], [nombre 2], [nombre 3], [nombre 4], [nombre 5]
+Integrantes: Giardelli Alan, Ojeda Ernesto, Orellano Nazareno, Rodrigeuz Bustos Mariano, Ruiz Alejandro, Saini Luis
 
-Producto: [una línea describiendo el producto — se completa en el TP1]
+Producto: Aplicacion para conectar alumnos que vivan en zonas cercanas y compartan auto para viajar a la Universidad
 
 Segmento de la comunidad UNLaM: [se completa en el TP1]

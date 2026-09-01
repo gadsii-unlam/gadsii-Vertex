@@ -1,7 +1,7 @@
 # Brief de Producto
 UNLaM Carpool — Brief de Producto
 
-Versión 1
+<!-- Versión 1 — TP1. Cada versión siguiente abre con un párrafo de qué cambió y por qué. -->
 
 Esta es la primera versión del Brief de Producto de UNLaM Carpool. En ella se define el segmento inicial de usuarios, el problema que se busca abordar, las funcionalidades principales, las integraciones previstas y los supuestos iniciales del equipo. Estos puntos serán validados y actualizados a partir del relevamiento con usuarios en los próximos trabajos prácticos.
 
@@ -70,3 +70,6 @@ Supuestos
     Evidencia: consultar durante el relevamiento si aceptarían realizar este proceso de verificación.
 6. Asumimos que existe suficiente coincidencia entre los horarios y recorridos de los estudiantes como para encontrar viajes compatibles.
     Evidencia: comparar los horarios, zonas de origen y recorridos habituales obtenidos durante el relevamiento.
+
+<!-- Versión 1.1 — TP1-->
+Actualización TP1: Se incorporó la estimación del tamaño del segmento objetivo, calculado en aproximadamente 24.000 estudiantes a partir de datos de matrícula de la UNLaM y de la distribución geográfica de sus estudiantes.

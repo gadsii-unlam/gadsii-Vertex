@@ -113,23 +113,23 @@ El relevamiento confirmó que este grupo experimenta problemas concretos relacio
 
 ## Estado de los supuestos
 
-### Supuesto 1 — Sin evidencia suficiente
+### Supuesto 1 — Sin evidencia
 
 Existen estudiantes que viajan regularmente en auto a la UNLaM, cuentan con lugares disponibles y estarían dispuestos a compartir sus viajes.
 
-Continúa siendo el supuesto crítico. U1 es la única de los tres usuarios relevados que utiliza ocasionalmente auto propio: indicó tener 3 lugares libres habitualmente y respondió "probablemente sí" a llevar a otros estudiantes, motivada por "poder compartir todos los gastos del viaje". Un único caso no permite determinar si existe suficiente oferta de conductores.
+Continúa siendo el supuesto crítico. El relevamiento no aporta evidencia suficiente para confirmarlo ni para refutarlo: al haberse relevado al grupo primario de pasajeros, un solo usuario resultó ser conductor. U1 es la única de los tres usuarios relevados que utiliza ocasionalmente auto propio: indicó tener 3 lugares libres habitualmente y respondió "probablemente sí" a llevar a otros estudiantes, motivada por "poder compartir todos los gastos del viaje". Un único caso no permite determinar si existe suficiente oferta de conductores.
 
-### Supuesto 2 — Parcialmente confirmado
+### Supuesto 2 — Confirmado
 
 Los estudiantes que viven a más de 5 km tienen dificultades relacionadas con el costo y tiempo de traslado y están dispuestos a explorar alternativas.
 
-La dificultad relacionada con el tiempo y la imprevisibilidad del transporte se confirmó en los tres usuarios. El costo del traslado habitual, en cambio, tuvo un impacto menor al esperado: U1 lo calificó con 3/5, U2 con 2/5 y U3 con 3/5. El costo sí se vuelve relevante cuando deben recurrir a una alternativa ante un inconveniente, como el remis que menciona U3.
+Se confirma en su núcleo: los tres usuarios reportaron dificultades concretas de traslado y disposición a explorar alternativas. La dificultad relacionada con el tiempo y la imprevisibilidad del transporte apareció en los tres. El costo del traslado habitual, en cambio, tuvo un impacto menor al esperado: U1 lo calificó con 3/5, U2 con 2/5 y U3 con 3/5. El costo sí se vuelve relevante cuando deben recurrir a una alternativa ante un inconveniente, como el remis que menciona U3.
 
-### Supuesto 3 — Confirmado condicionalmente
+### Supuesto 3 — Confirmado
 
 Los estudiantes estarían dispuestos a viajar en el vehículo de otro estudiante de la UNLaM que no conocen previamente.
 
-Los tres mostraron disposición, pero condicionada a contar con información que genere confianza. U1 pide "conocer a la persona o estar seguro que es un estudiante de la facultad" y U3 necesita saber "que por lo menos el perfil no es trucho". Los tres pidieron además alguna forma de historial: referencias de viajes anteriores (U1 y U3) y antigüedad en la universidad (U2).
+Los tres mostraron disposición, condicionada a contar con información que genere confianza. U1 pide "conocer a la persona o estar seguro que es un estudiante de la facultad" y U3 necesita saber "que por lo menos el perfil no es trucho". Los tres pidieron además alguna forma de historial: referencias de viajes anteriores (U1 y U3) y antigüedad en la universidad (U2). La condición no invalida el supuesto: define qué información debe mostrar el producto para que esa disposición se concrete.
 
 ### Supuesto 4 — Confirmado
 
@@ -143,11 +143,11 @@ Los estudiantes estarían dispuestos a utilizar su correo institucional y presen
 
 Los tres usuarios aceptaron realizar este proceso y lo consideraron sencillo: U1 lo calificó con 4/5, U2 con 5/5 y U3 con 4/5.
 
-### Supuesto 6 — Parcialmente confirmado
+### Supuesto 6 — Sin evidencia
 
 Existe suficiente coincidencia entre horarios y recorridos como para encontrar viajes compatibles.
 
-Los tres usuarios ya tuvieron experiencias compartiendo viajes por coincidencia de horarios y zonas, lo que demuestra que estas coincidencias existen: "salíamos al mismo horario e íbamos a la misma zona" (U2), "un amigo que justo coincidía un día de cursada me ofreció llevarme" (U3). La dificultad aparece en el viaje de vuelta, donde según U1 "muchas veces los horarios no son los mismos". La muestra no permite determinar todavía si estas coincidencias ocurren con suficiente frecuencia como para sostener el funcionamiento de la aplicación.
+Las coincidencias existen: los tres usuarios ya tuvieron experiencias compartiendo viajes surgidos de ellas, "salíamos al mismo horario e íbamos a la misma zona" (U2), "un amigo que justo coincidía un día de cursada me ofreció llevarme" (U3). Lo que el relevamiento no permite establecer es si son suficientes, que es lo que afirma el supuesto: tres respuestas no alcanzan para estimar con qué frecuencia se producen. La dificultad se concentra en el viaje de vuelta, donde según U1 "muchas veces los horarios no son los mismos".
 
 ## Nuevos hallazgos
 

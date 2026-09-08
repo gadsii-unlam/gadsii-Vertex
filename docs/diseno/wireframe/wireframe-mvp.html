@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNLaM Carpool - Wireframe MVP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: #1a5490;
+            color: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .wireframe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .wireframe-screen {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .wireframe-screen:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .phone-frame {
+            background: #333;
+            padding: 8px;
+            border-radius: 40px;
+            aspect-ratio: 9/16;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .phone-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 25px;
+            background: #333;
+            border-radius: 0 0 30px 30px;
+            z-index: 10;
+        }
+
+        .screen-content {
+            background: white;
+            height: 100%;
+            overflow-y: auto;
+            padding: 40px 16px 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen-header {
+            background: #1a5490;
+            color: white;
+            padding: 12px 16px;
+            margin: -40px -16px 20px -16px;
+            border-radius: 0 0 8px 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .screen-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #1a5490;
+            box-shadow: 0 0 0 3px rgba(26, 84, 144, 0.1);
+        }
+
+        .button {
+            width: 100%;
+            padding: 12px;
+            background: #1a5490;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background 0.2s;
+        }
+
+        .button:hover {
+            background: #0d3d6b;
+        }
+
+        .button-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .button-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .trip-card {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
+
+        .trip-time {
+            font-weight: 700;
+            color: #1a5490;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .trip-route {
+            color: #666;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .driver-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #ddd;
+        }
+
+        .driver-avatar {
+            width: 32px;
+            height: 32px;
+            background: #1a5490;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .driver-details {
+            flex: 1;
+        }
+
+        .driver-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 12px;
+        }
+
+        .driver-rating {
+            color: #ffa500;
+            font-size: 11px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e8f4f8;
+            color: #1a5490;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 4px;
+        }
+
+        .detailed-driver {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .driver-avatar-large {
+            width: 48px;
+            height: 48px;
+            background: #1a5490;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #e8f4f8;
+            color: #1a5490;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .verified-badge::before {
+            content: '✓';
+            font-weight: 700;
+        }
+
+        .history-item {
+            background: white;
+            border-left: 3px solid #1a5490;
+            padding: 8px;
+            margin-bottom: 8px;
+            font-size: 11px;
+            border-radius: 2px;
+        }
+
+        .history-date {
+            color: #999;
+            font-size: 10px;
+        }
+
+        .history-rating {
+            color: #ffa500;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .confirmation-summary {
+            background: #e8f4f8;
+            border: 1px solid #1a5490;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .confirmation-summary strong {
+            display: block;
+            color: #1a5490;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .annotation {
+            background: #fff3cd;
+            border-left: 3px solid #ffc107;
+            padding: 8px;
+            margin-top: 12px;
+            font-size: 11px;
+            color: #654d1a;
+            border-radius: 3px;
+        }
+
+        .screen-label {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .screen-number {
+            display: inline-block;
+            background: #1a5490;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .navigation-flow {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .flow-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .flow-step {
+            background: #1a5490;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .flow-arrow {
+            color: #1a5490;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .notes-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .notes-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .note-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .note-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .note-subtitle {
+            font-weight: 700;
+            color: #1a5490;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .note-text {
+            color: #555;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            background: #ffffcc;
+            padding: 2px 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>UNLaM Carpool — Wireframe del MVP</h1>
+            <p>Alternativa A: Optimizada para Satisfacción y Confianza | 6 pantallas del flujo principal</p>
+        </div>
+
+        <div class="wireframe-grid">
+            <!-- Pantalla 1 -->
+            <div class="wireframe-screen">
+                <div class="phone-frame">
+                    <div class="screen-content">
+                        <div class="screen-header">Pantalla 1</div>
+                        <div class="screen-title">Login</div>
+
+                        <div class="form-group">
+                            <label class="form-label">Correo institucional</label>
+                            <input type="email" class="form-input" placeholder="alumno@unlam.edu.ar" value="alumno@unlam.edu.ar">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Contraseña</label>
+                            <input type="password" class="form-input" placeholder="••••••••">
+                        </div>
+
+                        <button class="button">Ingresar</button>
+
+                        <div class="annotation">
+                            <strong>✓ Decisión:</strong> Login explícito antes de buscar para garantizar que el usuario se verifica como estudiante UNLaM. Transmite seguridad desde el primer paso.
+                        </div>
+
+                        <div class="screen-label">
+                            <span class="screen-number">1</span> de 6
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pantalla 2 -->
+            <div class="wireframe-screen">
+                <div class="phone-frame">
+                    <div class="screen-content">
+                        <div class="screen-header">Pantalla 2</div>
+                        <div class="screen-title">Buscar Viaje</div>
+
+                        <div class="form-group">
+                            <label class="form-label">Origen</label>
+                            <input type="text" class="form-input" placeholder="ej: San Antonio de Padua">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Destino</label>
+                            <input type="text" class="form-input" value="UNLaM">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Horario aproximado</label>
+                            <input type="time" class="form-input">
+                        </div>
+
+                        <button class="button">Buscar viajes</button>
+
+                        <div class="annotation">
+                            <strong>✓ Decisión:</strong> Campos separados y claros. Destino por defecto es UNLaM. Horario permite margen (compatibilidad automática).
+                        </div>
+
+                        <div class="screen-label">
+                            <span class="screen-number">2</span> de 6
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pantalla 3 -->
+            <div class="wireframe-screen">
+                <div class="phone-frame">
+                    <div class="screen-content">
+                        <div class="screen-header">Pantalla 3</div>
+                        <div class="screen-title">Viajes Disponibles</div>
+
+                        <div class="trip-card">
+                            <div class="trip-time">19:45 → 20:30</div>
+                            <div class="trip-route">San Antonio de Padua → UNLaM</div>
+                            <div class="driver-info">
+                                <div class="driver-avatar">JR</div>
+                                <div class="driver-details">
+                                    <div class="driver-name">
+                                        Juan Rodríguez
+                                        <span class="badge">Verificado</span>
+                                    </div>
+                                    <div class="driver-rating">4.8★ (15 viajes)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="trip-card">
+                            <div class="trip-time">19:50 → 20:35</div>
+                            <div class="trip-route">San Antonio de Padua → UNLaM</div>
+                            <div class="driver-info">
+                                <div class="driver-avatar">MG</div>
+                                <div class="driver-details">
+                                    <div class="driver-name">
+                                        Marina García
+                                        <span class="badge">Verificado</span>
+                                    </div>
+                                    <div class="driver-rating">5.0★ (8 viajes)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="annotation">
+                            <strong>✓ Decisión:</strong> Cada viaje muestra foto y verificación del conductor prominentemente. Ordenados por compatibilidad (horario y ruta).
+                        </div>
+
+                        <div class="screen-label">
+                            <span class="screen-number">3</span> de 6
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pantalla 4 -->
+            <div class="wireframe-screen">
+                <div class="phone-frame">
+                    <div class="screen-content">
+                        <div class="screen-header">Pantalla 4</div>
+                        <div class="screen-title">Detalle del Conductor</div>
+
+                        <div class="detailed-driver">
+                            <div class="driver-avatar-large">JR</div>
+                            <div style="font-weight: 700; color: #333; margin-bottom: 4px;">Juan Rodríguez</div>
+                            <div class="verified-badge">Estudiante UNLaM</div>
+
+                            <div style="margin-top: 12px; font-size: 11px; color: #666;">
+                                <strong style="display: block; color: #333; margin-bottom: 4px;">Historial de viajes</strong>
+                                <div class="history-item">
+                                    <div class="history-rating">5.0★ Excelente</div>
+                                    <div>Viajé el 03/09 desde San Justo</div>
+                                    <div class="history-date">"Conductor muy responsable"</div>
+                                </div>
+                                <div class="history-item">
+                                    <div class="history-rating">4.8★ Muy bueno</div>
+                                    <div>Viajé el 01/09 desde Rafael Castillo</div>
+                                    <div class="history-date">"Llegué a tiempo"</div>
+                                </div>
+                                <div class="history-item">
+                                    <div class="history-rating">5.0★ Excelente</div>
+                                    <div>Viajé el 30/08 desde San Antonio</div>
+                                    <div class="history-date">"Muy seguro"</div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 12px; font-size: 11px; color: #666;">
+                                <strong style="display: block; color: #333; margin-bottom: 4px;">Vehículo</strong>
+                                Ford Fiesta Blanco • Año 2018
+                            </div>
+                        </div>
+
+                        <button class="button">Ver completo</button>
+
+                        <div class="annotation">
+                            <strong>✓ Decisión:</strong> Información abundante: foto, verificación, referencias detalladas. Esto ataca directamente el problema de desconfianza identificado en TP2.
+                        </div>
+
+                        <div class="screen-label">
+                            <span class="screen-number">4</span> de 6
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pantalla 5 -->
+            <div class="wireframe-screen">
+                <div class="phone-frame">
+                    <div class="screen-content">
+                        <div class="screen-header">Pantalla 5</div>
+                        <div class="screen-title">Confirmar Viaje</div>
+
+                        <div class="confirmation-summary">
+                            <strong>Viaje</strong>
+                            19:45 → 20:30<br>
+                            San Antonio de Padua → UNLaM<br>
+                            2 lugares disponibles
+                        </div>
+
+                        <div class="confirmation-summary">
+                            <strong>Conductor</strong>
+                            Juan Rodríguez ✓<br>
+                            4.8★ en 15 viajes<br>
+                            Ford Fiesta Blanco
+                        </div>
+
+                        <div style="font-size: 12px; color: #666; margin-bottom: 12px; line-height: 1.5;">
+                            <strong style="display: block; color: #333; margin-bottom: 4px;">Punto de encuentro</strong>
+                            Estación de San Antonio (Acceso Sur)
+                        </div>
+
+                        <button class="button">Solicitar lugar</button>
+                        <button class="button button-secondary">Volver</button>
+
+                        <div class="annotation">
+                            <strong>✓ Decisión:</strong> Resumen clara de viaje y conductor antes de confirmar. Múltiples exposiciones a señales de confianza (verificación, referencias, calificación).
+                        </div>
+
+                        <div class="screen-label">
+                            <span class="screen-number">5</span> de 6
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pantalla 6 -->
+            <div class="wireframe-screen">
+                <div class="phone-frame">
+                    <div class="screen-content">
+                        <div class="screen-header">Pantalla 6</div>
+                        <div class="screen-title">Solicitud Confirmada</div>
+
+                        <div style="background: #e8f5e9; border: 1px solid #4caf50; border-radius: 6px; padding: 12px; margin-bottom: 12px; color: #2e7d32; font-size: 12px;">
+                            <strong>✓ ¡Viaje confirmado!</strong><br>
+                            Tu solicitud fue aceptada
+                        </div>
+
+                        <div class="confirmation-summary">
+                            <strong>Conductor</strong>
+                            Juan Rodríguez<br>
+                            Teléfono: +54 9 11 XXXX-XXXX
+                        </div>
+
+                        <div class="confirmation-summary">
+                            <strong>Detalles del viaje</strong>
+                            19:45 en Estación San Antonio<br>
+                            Llegada: ~20:30 en UNLaM
+                        </div>
+
+                        <div style="background: #fff3cd; border-left: 3px solid #ffc107; padding: 12px; border-radius: 4px; font-size: 11px; color: #654d1a; line-height: 1.5; margin-bottom: 12px;">
+                            <strong>Recordatorio de seguridad</strong><br>
+                            Estás viajando con un estudiante verificado de UNLaM. Comparte tu ubicación con un amigo de confianza.
+                        </div>
+
+                        <button class="button">Listo</button>
+
+                        <div class="annotation">
+                            <strong>✓ Decisión:</strong> Confirmación con recordatorio de seguridad. Información del conductor disponible. Transmite calma y control.
+                        </div>
+
+                        <div class="screen-label">
+                            <span class="screen-number">6</span> de 6
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation-flow">
+            <div class="flow-title">Flujo de navegación</div>
+            <div class="flow-diagram">
+                <div class="flow-step">1. Login</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">2. Buscar</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">3. Resultados</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">4. Detalle</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">5. Confirmar</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">6. Éxito</div>
+            </div>
+        </div>
+
+        <div class="notes-section">
+            <div class="notes-title">Decisiones de diseño anotadas</div>
+
+            <div class="note-item">
+                <div class="note-subtitle">1. Login separado</div>
+                <div class="note-text">
+                    El usuario debe ingresar con su correo institucional antes de buscar. Esto garantiza que todos los usuarios en la aplicación son estudiantes UNLaM verificados, lo que es crítico para la confianza identificada en TP2. U1 pidió explícitamente "estar seguro que es un estudiante de la facultad".
+                </div>
+            </div>
+
+            <div class="note-item">
+                <div class="note-subtitle">2. Información del conductor en cada resultado</div>
+                <div class="note-text">
+                    En la pantalla de resultados (3), cada viaje muestra foto del conductor, nombre, verificación y calificación. No es necesario hacer clic para ver si el conductor es confiable. Esto reduce incertidumbre desde el primer vistazo.
+                </div>
+            </div>
+
+            <div class="note-item">
+                <div class="note-subtitle">3. Historial detallado antes de confirmar</div>
+                <div class="note-text">
+                    La pantalla de detalle del conductor (4) muestra referencias específicas de viajes anteriores con fechas, calificaciones y comentarios. U1 y U3 pidieron "referencias de viajes anteriores" como condición explícita para confiar. Esta pantalla satisface ese requisito.
+                </div>
+            </div>
+
+            <div class="note-item">
+                <div class="note-subtitle">4. Resumen de confirmación con múltiples señales</div>
+                <div class="note-text">
+                    Antes de hacer clic en "Solicitar lugar" (pantalla 5), el usuario ve un resumen que repite la información del conductor (nombre, verificación, calificación, vehículo). Múltiples exposiciones a las mismas señales de confianza reducen la fricción cognitiva.
+                </div>
+            </div>
+
+            <div class="note-item">
+                <div class="note-subtitle">5. Recordatorio de seguridad nocturna</div>
+                <div class="note-text">
+                    La pantalla de éxito (6) incluye un recordatorio sobre seguridad nocturna: "Compartir tu ubicación con un amigo de confianza". Esto responde al hallazgo del TP2 donde U1 y U3 mencionaron inseguridad durante viajes nocturnos.
+                </div>
+            </div>
+
+            <div class="note-item">
+                <div class="note-subtitle">6. Costo y compromiso</div>
+                <div class="note-text">
+                    Este diseño tiene 6 pantallas en lugar de 4 (que sería más eficiente). El costo es tiempo de navegación. El beneficio es satisfacción y confianza. Para el usuario del TP2, que valora confianza más que velocidad, este compromiso es consciente y fundamentado.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

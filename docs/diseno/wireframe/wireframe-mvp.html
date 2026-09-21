@@ -40,11 +40,36 @@
             opacity: 0.9;
         }
 
+        .interactive-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .interactive-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .wireframe-display {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
         .wireframe-grid {
-            display: grid;
+            display: none;
             grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
             gap: 30px;
             margin-bottom: 40px;
+        }
+
+        .wireframe-grid.reference-view {
+            display: grid;
         }
 
         .wireframe-screen {
@@ -433,7 +458,15 @@
             <p>Alternativa A: Optimizada para Satisfacción y Confianza | 6 pantallas del flujo principal</p>
         </div>
 
-        <div class="wireframe-grid">
+        <div class="interactive-section">
+            <div class="interactive-title">Flujo Interactivo — Haz clic en los botones para navegar</div>
+            <div class="wireframe-display" id="interactiveDisplay"></div>
+            <div style="text-align: center; margin-top: 20px; color: #666; font-size: 13px;">
+                <span id="screenCounter"></span>
+            </div>
+        </div>
+
+        <div class="wireframe-grid reference-view">
             <!-- Pantalla 1 -->
             <div class="wireframe-screen">
                 <div class="phone-frame">
@@ -743,5 +776,89 @@
             </div>
         </div>
     </div>
+
+    <script>
+        let currentScreen = 0;
+        const screens = document.querySelectorAll('.wireframe-screen');
+        const interactiveDisplay = document.getElementById('interactiveDisplay');
+        const screenCounter = document.getElementById('screenCounter');
+
+        function displayScreen(screenIndex) {
+            // Clona el contenido de la pantalla seleccionada
+            const sourceScreen = screens[screenIndex];
+            const clone = sourceScreen.cloneNode(true);
+
+            // Limpia el display
+            interactiveDisplay.innerHTML = '';
+            interactiveDisplay.appendChild(clone);
+
+            // Actualiza el contador
+            screenCounter.textContent = `Pantalla ${screenIndex + 1} de 6`;
+
+            // Agrega event listeners a los botones de esta pantalla
+            attachButtonListeners(clone, screenIndex);
+        }
+
+        function attachButtonListeners(screenClone, screenIndex) {
+            const buttons = screenClone.querySelectorAll('.button');
+
+            buttons.forEach((button, index) => {
+                button.style.cursor = 'pointer';
+
+                // Pantalla 1: Botón "Ingresar" → Pantalla 2
+                if (screenIndex === 0 && index === 0) {
+                    button.addEventListener('click', () => goToScreen(1));
+                }
+                // Pantalla 2: Botón "Buscar viajes" → Pantalla 3
+                else if (screenIndex === 1 && index === 0) {
+                    button.addEventListener('click', () => goToScreen(2));
+                }
+                // Pantalla 3: Hacer clic en una tarjeta de viaje → Pantalla 4
+                else if (screenIndex === 2) {
+                    // Busca las tarjetas de viaje
+                    const tripCards = screenClone.querySelectorAll('.trip-card');
+                    tripCards.forEach(card => {
+                        card.style.cursor = 'pointer';
+                        card.addEventListener('click', () => goToScreen(3));
+                    });
+                }
+                // Pantalla 4: Botón "Ver completo" → Pantalla 5
+                else if (screenIndex === 3 && index === 0) {
+                    button.addEventListener('click', () => goToScreen(4));
+                }
+                // Pantalla 5: Botón "Solicitar lugar" → Pantalla 6
+                else if (screenIndex === 4 && index === 0) {
+                    button.addEventListener('click', () => goToScreen(5));
+                }
+                // Pantalla 5: Botón "Volver" → Pantalla 3 (ver resultados nuevamente)
+                else if (screenIndex === 4 && index === 1) {
+                    button.addEventListener('click', () => goToScreen(2));
+                }
+                // Pantalla 6: Botón "Listo" → Pantalla 1 (reinicia)
+                else if (screenIndex === 5 && index === 0) {
+                    button.addEventListener('click', () => goToScreen(0));
+                }
+            });
+
+            // En pantalla 3, también se puede hacer clic en la tarjeta
+            if (screenIndex === 2) {
+                const tripCards = screenClone.querySelectorAll('.trip-card');
+                tripCards.forEach(card => {
+                    card.style.cursor = 'pointer';
+                    card.addEventListener('click', () => goToScreen(3));
+                });
+            }
+        }
+
+        function goToScreen(screenIndex) {
+            if (screenIndex >= 0 && screenIndex < screens.length) {
+                currentScreen = screenIndex;
+                displayScreen(currentScreen);
+            }
+        }
+
+        // Inicializa con la primera pantalla
+        displayScreen(0);
+    </script>
 </body>
 </html>

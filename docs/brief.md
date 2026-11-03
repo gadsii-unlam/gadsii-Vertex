@@ -1,11 +1,11 @@
 # Brief de Producto
 UNLaM Carpool — Brief de Producto
  
-**Versión 3.0 — TP3**
+**Versión 4.0 — TP5**
  
-## Cambios respecto de la versión 2
+## Cambios respecto de la versión 3
  
-A partir de los hallazgos del TP2, se define el alcance del MVP centrándose en validar la hipótesis de valor. Se determina qué funcionalidades se construyen y cuáles se simulan para poder hacer una prueba significativa sin depender de infraestructura completa. Se define el flujo principal del usuario pasajero como el centro del MVP y se priorizan los atributos de usabilidad (eficiencia y satisfacción) que atacan directamente los problemas identificados: la imprevisibilidad del transporte público y la desconfianza al viajar con otro estudiante.
+Se construye el MVP con el scope del TP3, solo el flujo del pasajero, y las 8 correcciones que el equipo aceptó en el TP4-B, incluida la etiqueta de coincidencia con la cursada, que prioriza a quienes cursan juntos como pide la hipótesis. El costo estimado y el tipo de recorrido que indicaría el conductor entran como datos precargados de cada viaje, porque la publicación y los pagos siguen excluidos. El costo se calcula con nafta a $2.300 por litro y un consumo de 15 km por litro. Se definen las métricas y el criterio de éxito, reformulados después como dos tasas simples, y se prueba el MVP con U1, U2 y U3, en sesiones simuladas a partir del TP2 con autorización de la cátedra. **La hipótesis se sostiene:** la tasa de solicitud y la tasa de reemplazo llegan al 67 %, y la cursada compartida pesó en la elección. El valor se concentra en quienes viajan 45 minutos o más; para quien vive cerca, el producto es un respaldo cuando falla el transporte. **El equipo decide perseverar** y lo próximo es validar la oferta de conductores, que sigue siendo el supuesto crítico.
  
 ## Segmento elegido
  
@@ -64,7 +64,8 @@ En los viajes de regreso resulta especialmente útil coordinar con estudiantes q
 ## Funcionalidades core
  
 * Registro y verificación de estudiantes mediante correo institucional y certificado de alumno regular.
-* Publicación de viajes indicando origen, destino, fecha, horario y lugares disponibles.
+* Verificación de conductores mediante licencia, seguro y datos del vehículo.
+* Publicación de viajes indicando origen, destino, fecha, horario, lugares disponibles y costo estimado.
 * Búsqueda y matching según ubicación, recorrido y horario.
 * Priorización de coincidencias entre estudiantes que compartan cursada.
 * Solicitud y confirmación de viajes.
@@ -161,14 +162,18 @@ El MVP incluye las siguientes funcionalidades:
  
 * Registro y verificación de estudiantes mediante correo institucional y certificado de alumno regular.
 * Búsqueda de viajes indicando origen, destino y horario aproximado.
-* Listado y priorización de viajes compatibles según ubicación, recorrido, horario y, cuando corresponda, cursada compartida.
-* Detalle del viaje con información del conductor, su condición de estudiante verificado y referencias de viajes anteriores.
-* Solicitud y confirmación de un lugar en el viaje.
+* Selección de solo ida, ida y vuelta o solo vuelta, con intercambio de origen y destino y sugerencias de ubicaciones.
+* Listado y priorización de viajes compatibles según ubicación, recorrido y horario, con primero los de quienes cursan con el pasajero ese día.
+* Etiqueta de coincidencia con la cursada: el pasajero marca sus comisiones y ve "Cursan juntos" en los conductores que cursan la misma materia, el mismo día y en el mismo horario.
+* Detalle del viaje con información del conductor, su vehículo y patente, su condición de estudiante verificado y referencias de viajes anteriores.
+* Costo estimado por persona al consultar un viaje. Es el que indicaría el conductor al publicar y está precargado en cada viaje, junto con su tipo de recorrido, porque la publicación queda excluida.
+* Solicitud y confirmación de un lugar en el viaje, y cancelación con confirmación previa.
+* Opciones para volver o cancelar en los distintos flujos.
 ### Elementos excluidos
  
-* Integración real con SIU Guaraní: la verificación puede simularse sin afectar la prueba de la hipótesis.
+* Integración real con SIU Guaraní: la verificación puede simularse sin afectar la prueba de la hipótesis, y la cursada se elige de una lista de comisiones.
 * Mapas, geolocalización y cálculo real de rutas: se pueden usar recorridos previamente cargados.
-* Publicación de viajes por conductores: los viajes estarán precargados para que el MVP se centre en el flujo del pasajero.
+* Publicación de viajes por conductores: el MVP se centra en el flujo del pasajero y los viajes están precargados. Lo que el TP4-B pide al conductor (costo estimado y tipo de recorrido) ya viene cargado en cada viaje.
 * Sistema completo de reputación: alcanza con mostrar referencias simuladas para evaluar su efecto en la confianza.
 * Pagos, chat, notificaciones y seguimiento en tiempo real: no son necesarios para determinar si el usuario encuentra y elige un viaje compatible.
 ## Qué se construye y qué se simula
@@ -183,13 +188,17 @@ El MVP incluye las siguientes funcionalidades:
  
 **Solicitud y confirmación:** Se construye el flujo completo del pasajero. La aceptación del conductor se simula, ya que el experimento está centrado en el usuario pasajero.
  
+**Cursada:** Se construyen la carga de comisiones, la etiqueta "Cursan juntos" y la prioridad en el listado. Las comisiones de los conductores se precargan y la lista de comisiones reemplaza a SIU Guaraní.
+ 
+**Costo y tipo de recorrido del conductor:** Se precarga en cada viaje lo que el conductor habría indicado al publicar: el tipo de recorrido y el estimado por persona, distancia ÷ 15 km por litro × $2.300 por litro, dividido entre quienes viajan. Las distancias son aproximadas y el pago se arregla entre las personas.
+ 
 ## Flujo principal del MVP
  
 El flujo principal sigue el recorrido del estudiante pasajero desde que ingresa hasta que obtiene una alternativa concreta de traslado.
  
-1. El usuario ingresa a UNLaM Carpool con su perfil de estudiante verificado.
+1. El usuario ingresa a UNLaM Carpool con su perfil de estudiante verificado y, si quiere, carga su cursada.
 2. Indica su origen, destino y horario aproximado de viaje.
-3. La aplicación muestra los viajes compatibles disponibles, priorizando coincidencias de horario, recorrido y, cuando corresponda, cursada compartida.
+3. La aplicación muestra los viajes compatibles disponibles: primero los de quienes cursan con el usuario ese día, con la etiqueta "Cursan juntos", y después por horario y recorrido.
 4. El usuario selecciona un viaje y consulta el detalle del recorrido y la información del conductor, incluyendo su condición de estudiante verificado y referencias de viajes anteriores.
 5. Si considera que la opción es adecuada y confiable, solicita un lugar.
 6. La aplicación confirma la solicitud y muestra los datos principales del viaje.
@@ -206,3 +215,71 @@ El usuario debe encontrar un viaje compatible en pocos pasos y sin demoras. El p
 ### Satisfacción
  
 La experiencia debe transmitir confianza y seguridad al elegir con quién viajar. En el relevamiento fue condición explícita: U1 pidió "estar seguro que es un estudiante de la facultad" y U3 necesita saber "que por lo menos el perfil no es trucho", a lo que se sumó la inseguridad nocturna (U3: no tener que "estar atento a que me roben"). Como los tres cursan de noche, la seguridad percibida es parte del valor. La información sobre el conductor, su verificación y sus referencias deben ser claras y confiables.
+ 
+## Métricas y criterio de éxito
+ 
+El detalle está en [`docs/metricas.md`](metricas.md). Una métrica es accionable si, cuando cambia, sabemos qué cambiar o qué decidir.
+ 
+* **Métrica accionable 1, tasa de solicitud:** el porcentaje de usuarios que, buscando su recorrido y su horario reales, solicitan un lugar sin ayuda.
+* **Métrica accionable 2, tasa de reemplazo:** el porcentaje de usuarios que eligen un día concreto de su semana para usar la aplicación en lugar de su transporte y dejan un contacto.
+* **Métrica vanidosa:** la cantidad de usuarios registrados.
+* **La hipótesis se sostiene** si las dos tasas llegan al 67 % (2 de 3), el umbral de la hipótesis del TP2. **Se refuta** si la tasa de reemplazo es de 33 % o menos.
+ 
+## Aprendizajes de la prueba
+ 
+La evidencia está en `docs/evidencia/tp5/` y el análisis en `docs/informe-tp5.md`.
+ 
+### Sobre el producto
+ 
+* **Los viajes largos son el caso fuerte.** U1 y U3, que tardan entre 45 minutos y 1 hora, eligieron un día concreto para reemplazar su transporte: "Los martes, que salgo a las 23" (U1) y "Los lunes y los miércoles" (U3).
+* **Para viajes cortos es un respaldo.** U2, a 8 km y 20 minutos, lo usaría "cuando hay paro o llueve", no un día fijo.
+* **La cursada compartida genera confianza.** A U3 le cambió la elección: eligió a Juan, que cursa con su comisión y sale 30 minutos después, antes que a Marina: "Si lo veo en clase, ya no es un desconocido". A U1 le confirmó la que ya era la mejor por horario.
+* **En viajes largos, las referencias también pesan.** U1 y U3 compararon dos conductores y citaron referencias y cantidad de viajes. U2 eligió solo por horario.
+* **La verificación tiene que verse real.** U3 dudó de un certificado aprobado en 3 segundos: "Entonces cualquiera sube cualquier cosa."
+* **Hay interés del lado del conductor.** U1, que maneja, buscó dónde ofrecer su auto. Es un solo caso y no confirma la oferta.
+* **El costo no frenó a nadie.** Los tres lo vieron barato. U1 lo comparó con el remis y U3 con el colectivo y el tren juntos.
+ 
+### Sobre la usabilidad
+ 
+* Los tres completaron el flujo sin rescate.
+* "Solo ida" elegido de antemano llevó a U3 a una búsqueda sin resultados.
+* U2 no notó el día y pidió el viaje para el día equivocado.
+* Las sugerencias no reconocen barrios: U3 escribió "Padua Sur" y recibió un error.
+* El código de ingreso aparece en pantalla, pero U1 y U3 lo buscaron en su correo.
+* La cursada depende de que la carguen: U2 omitió el paso ("eran un montón de materias para marcar") y U3 preguntó qué pasaba si su comisión no estaba.
+ 
+## Estado de la hipótesis
+ 
+**Se sostiene según el criterio de éxito.** La tasa de solicitud es de 67 %: U1 y U3 pidieron un lugar sin ayuda, y U2 lo pidió para el día equivocado. La tasa de reemplazo también es de 67 %: U1 y U3 eligieron un día concreto y dejaron contacto, y U2 lo usaría solo "cuando hay paro o llueve".
+ 
+**Límites de esta conclusión:**
+ 
+* La prioridad por cursada se evaluó con dos usuarios: U2 no cargó su cursada.
+* La existencia de conductores no se evaluó, porque los viajes estaban precargados.
+* La tasa de solicitud puede estar dando una lectura optimista: en la prueba siempre hay un viaje que coincide, todos los conductores son buenos y pedir un lugar no exige subirse a un auto.
+* Las métricas se reformularon después de las sesiones. Los umbrales son los de la hipótesis del TP2.
+* Las sesiones fueron simuladas a partir del TP2. La decisión debe confirmarse con conductores y viajes reales.
+ 
+### Estado de los supuestos después de la prueba
+ 
+| Supuesto | Estado en la v3 | Estado en la v4 |
+| --- | --- | --- |
+| 1. Hay conductores dispuestos a compartir | Sin evidencia | Sin evidencia. U1 buscó cómo ofrecer su auto, pero es un solo caso |
+| 2. Quienes viven a más de 5 km tienen dificultades y explorarían alternativas | Confirmado | Confirmado con matiz: como reemplazo, para viajes de 45 minutos o más; como respaldo, para viajes cortos |
+| 3. Viajarían con un estudiante que no conocen | Confirmado | Confirmado: los tres solicitaron un lugar. Si comparten cursada, prefieren a quien ven en clase |
+| 4. La verificación aumenta la confianza | Confirmado | Confirmado, con la condición de que la revisión se perciba real |
+| 5. Aceptan correo institucional y certificado | Confirmado | Confirmado: los tres completaron el ingreso |
+| 6. Hay suficiente coincidencia de horarios y recorridos | Sin evidencia | Sin evidencia: los viajes estaban preparados para coincidir |
+ 
+## Decisión: pivotar o perseverar
+ 
+**Perseverar.** El criterio de éxito se cumple en las dos métricas, y los dos usuarios que suman reproducen el problema central del TP2 con un día concreto de su semana y eligieron por la cursada compartida y las referencias. El caso de U2 muestra dónde está el valor, no que la hipótesis sea falsa.
+ 
+**Lo próximo a construir:**
+ 
+1. **Publicación de viajes por conductores**, para poner a prueba el supuesto 1, que sigue siendo el crítico.
+2. **Correcciones de usabilidad de la prueba:** tipo de recorrido sin opción elegida de antemano, día más visible, barrios en las sugerencias y aviso claro de dónde llega el código.
+3. **Revisión del certificado con plazo y aviso**, para que la verificación se perciba real.
+4. **Cursada sin esfuerzo:** traerla de SIU Guaraní o, mientras tanto, buscar la comisión escribiendo su nombre.
+ 
+**Qué cambiaría la decisión:** si al abrir la publicación no aparecen conductores para la cursada nocturna, correspondería un pivote de necesidad del consumidor: una alternativa para días de paro y demoras, el uso que sí valoró U2.

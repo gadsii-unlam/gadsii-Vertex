@@ -18,3 +18,9 @@ Aplicación orientada a facilitar el traslado de estudiantes hacia y desde la UN
 Segmento de la comunidad UNLaM
 
 Estudiantes de la UNLaM que viven a más de 5 km de la universidad y cursan presencialmente al menos dos veces por semana.
+
+MVP
+
+El MVP está en `src/` y cubre el flujo del pasajero definido en el TP3. Está publicado en <https://carpool.timecore.com.ar>: se abre desde el navegador, en la computadora o en el celular, sin instalar nada.
+
+Cómo se publica y cómo se prepara una sesión de prueba: [`docs/configuracion/ejecutar-mvp.md`](docs/configuracion/ejecutar-mvp.md).

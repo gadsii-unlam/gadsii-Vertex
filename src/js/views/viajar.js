@@ -14,7 +14,7 @@ import {
 } from '../componentes.js';
 import { costoEstimado, pesos } from '../core/costo.js';
 import { cursadaCompartida } from '../core/cursada.js';
-import { buscarLocalidad } from '../core/localidades.js';
+import { buscarLocalidad, UNLAM } from '../core/localidades.js';
 import { buscarViajes, nivelCoincidencia } from '../core/matching.js';
 import { fechaLegible, validarRecorrido } from '../core/recorrido.js';
 import { CONDUCTORES } from '../data.js';
@@ -32,7 +32,7 @@ import {
   track,
   viajePorId,
 } from '../store.js';
-import { aviso, confirmar, html, icono, mostrarErrores } from '../ui.js';
+import { aviso, confirmar, escapar, html, icono, mostrarErrores, Seguro } from '../ui.js';
 import { leerRecorrido, montarRecorrido, recorridoHtml, valoresIniciales } from './recorrido.js';
 
 export function buscar() {
@@ -72,23 +72,30 @@ export function buscar() {
 
 function tarjetaViaje(resultado, busqueda) {
   const { viaje, conductor } = resultado;
-  const [tramo] = tramosDeViaje(viaje, busqueda.tipo);
-  return html`<a class="tarjeta-viaje" href="#/viaje/${viaje.id}">
+  const tramos = tramosDeViaje(viaje, busqueda.tipo);
+  const [ida, vuelta] = tramos;
+  return html`<a class="tarjeta-viaje" href="#/viaje/${viaje.id}" aria-label="${busqueda.localidad} a ${UNLAM}, ${ida ? `sale ${ida.hora}` : ''}${vuelta ? `, vuelve ${vuelta.hora}` : ''}, costo estimado ${pesos(costoEstimado(viaje, busqueda.tipo))} por persona, con ${conductor.nombre}">
     <div class="tarjeta-cabecera">
-      ${resultado.cursada && html`<span class="cursan-juntos">${icono('persona')}Cursan juntos</span>`}
-      <span class="coincidencia coincidencia-${nivelCoincidencia(resultado.puntaje).toLowerCase()}">Coincidencia ${nivelCoincidencia(resultado.puntaje).toLowerCase()}</span>
-      ${esNocturno(tramo.hora) && html`<span class="nocturno">${icono('luna')}Noche</span>`}
-      <span class="tipo-chip">${TIPOS[viaje.tipo]}</span>
+      ${ida && html`<time class="via-hora">${ida.hora}</time>`}
+      <b class="via-origen">${ida ? ida.origen : UNLAM}</b>
+      ${html`<span class="via-flecha">${icono('flecha')}</span>`}
+      <b class="via-destino">${ida ? ida.destino : UNLAM}</b>
+      ${vuelta && html`<span class="via-vuelta">${icono('invertir')}vuelve <time>${vuelta.hora}</time></span>`}
+      <span class="via-punto">${icono('pin')}${viaje.punto}</span>
     </div>
-    ${tiraRecorrido(tramo)}
-    <ul class="motivos">${resultado.motivos.map((motivo) => html`<li>${motivo}</li>`)}</ul>
+    <div class="tarjeta-accion">
+      <span class="tarjeta-precio"><span class="tarjeta-precio-cifras"><i>≈</i><b>${pesos(costoEstimado(viaje, busqueda.tipo))}</b></span><small>por persona</small></span>
+      <span class="tarjeta-ver">Ver viaje ${icono('flecha')}</span>
+    </div>
+    <div class="tarjeta-chips" role="list">
+      ${resultado.cursada && html`<span class="cursan-juntos" role="listitem">${icono('persona')}Cursan juntos · ${resultado.cursada.materia}</span>`}
+      <span class="coincidencia coincidencia-${nivelCoincidencia(resultado.puntaje).toLowerCase()}" role="listitem">Coincidencia ${nivelCoincidencia(resultado.puntaje).toLowerCase()}</span>
+      ${tramos.some((parada) => esNocturno(parada.hora)) && html`<span class="nocturno" role="listitem">${icono('luna')}Noche</span>`}
+      <span role="listitem">${viaje.lugaresLibres} ${viaje.lugaresLibres === 1 ? 'lugar disponible' : 'lugares disponibles'}</span>
+    </div>
     <div class="tarjeta-conductor">
       ${avatar(conductor)}
-      <div class="tarjeta-persona"><b>${conductor.nombre}</b>${sello()}${puntaje(conductor)}</div>
-    </div>
-    <div class="tarjeta-pie">
-      <span>${viaje.lugaresLibres} ${viaje.lugaresLibres === 1 ? 'lugar' : 'lugares'}</span>
-      <span class="tarjeta-precio">≈ <b>${pesos(costoEstimado(viaje, busqueda.tipo))}</b> por persona</span>
+      <b>${conductor.nombre}</b>${sello()}${puntaje(conductor)}
     </div>
   </a>`;
 }
@@ -98,23 +105,58 @@ export function resultados() {
   if (!busqueda) return { redirigir: '#/buscar' };
   const cursada = estado.usuario.cursada ?? [];
   const encontrados = buscarViajes(estado.viajes, CONDUCTORES, busqueda, undefined, cursada);
-  const horario = [busqueda.tipo !== 'vuelta' && busqueda.horaIda, busqueda.tipo !== 'ida' && busqueda.horaVuelta].filter(Boolean).join(' y ');
+  const cantidad = encontrados.length;
+  const plural = cantidad === 1 ? 'viaje' : 'viajes';
+  const horas = [
+    busqueda.tipo !== 'vuelta' ? `salida ${busqueda.horaIda}` : null,
+    busqueda.tipo !== 'ida' ? `vuelta ${busqueda.horaVuelta}` : null,
+  ].filter(Boolean).join(' · ');
+  const resumen = html`<section class="resumen-busqueda" aria-label="Resumen de tu búsqueda">
+      <div class="resumen-recorrido" aria-label="De ${busqueda.localidad} a ${UNLAM}">
+        <span class="resumen-punto">
+          <i aria-hidden="true"></i>
+          <b>${busqueda.localidad}</b>
+        </span>
+        <span class="resumen-flecha" aria-hidden="true">${icono('flecha')}</span>
+        <span class="resumen-punto destino">
+          <i aria-hidden="true"></i>
+          <b>${UNLAM}</b>
+        </span>
+      </div>
+      <div class="resumen-meta">
+        <div class="resumen-fichas">
+          <span class="resumen-ficha"><b>${cantidad}</b> ${plural}</span>
+          <span class="resumen-ficha">${fechaLegible(busqueda.fecha)}</span>
+          <span class="resumen-ficha">${TIPOS[busqueda.tipo]}</span>
+          ${horas && html`<span class="resumen-ficha">${horas}</span>`}
+        </div>
+        ${cantidad > 0 && html`<a class="resumen-modificar btn btn-secundario" href="#/buscar" data-evento="modificar_busqueda">${icono('invertir')}Modificar búsqueda</a>`}
+      </div>
+    </section>`;
+  // v11 · Frase del vacío: constante para no dejar tiempos sueltos ("20:00 .").
+  const detalle = [busqueda.tipo !== 'vuelta' ? `con salida cerca de las ${busqueda.horaIda}` : '', busqueda.tipo !== 'ida' ? `vuelta cerca de las ${busqueda.horaVuelta}` : ''].filter(Boolean).join(' y ');
   return {
     titulo: 'Viajes',
     volver: '#/buscar',
-    cancelar: '#/buscar',
-    cuerpo: html`<h1 tabindex="-1">${encontrados.length ? `${encontrados.length} ${encontrados.length === 1 ? 'viaje compatible' : 'viajes compatibles'}` : 'No hay viajes para esa búsqueda'}</h1>
-      <p class="bajada">${TIPOS[busqueda.tipo]} · ${busqueda.localidad} · ${horario} · ${fechaLegible(busqueda.fecha)}</p>
-      ${encontrados.length > 0 && html`<p class="nota">${icono('escudo')}Todos los conductores son estudiantes verificados. Primero van quienes cursan con vos ese día, en la misma comisión y turno; después, por horario y referencias.</p>
-        ${!cursada.length && html`<p class="nota">${icono('persona')}<span>Para ver con quién cursás, <a href="#/cursada">cargá tu cursada</a>.</span></p>`}
-        <div class="lista-viajes">${encontrados.map((resultado) => tarjetaViaje(resultado, busqueda))}</div>`}
-      ${!encontrados.length && html`<div class="vacio">
+    cuerpo: html`<h1 class="solo-lector" tabindex="-1">${cantidad ? `Resultados de tu búsqueda` : 'No hay viajes para esa búsqueda'}</h1>
+      ${resumen}
+      ${cantidad > 0 && html`<p class="nota">${icono('escudo')}Todos los conductores son estudiantes verificados. Primero van quienes cursan con vos ese día, en la misma comisión y turno; después, por horario y referencias.</p>
+        ${!cursada.length && html`<p class="nota">${icono('persona')}<span>Para ver con quién cursás, <a href="#/cursada">cargá tu cursada</a>.</span>`}`}
+      ${cantidad > 0 && html`<div class="lista-viajes">${encontrados.map((resultado) => tarjetaViaje(resultado, busqueda))}</div>`}
+      ${!cantidad && html`<div class="vacio vacio-v7">
         ${icono('auto')}
-        <p>No encontramos viajes dentro de la hora que pediste. Probá con otro horario o con "Solo ida" o "Solo vuelta".</p>
-        <a class="btn btn-secundario" href="#/buscar">Cambiar la búsqueda</a>
+        <h2>Sin viajes dentro de tu horario</h2>
+        <p>
+          No encontramos viajes de ${busqueda.localidad || 'tu localidad'}
+          ${detalle}.
+          Probá con otro horario o con otro día.
+        </p>
+        <div class="vacio-acciones">
+          <a class="btn btn-primario" href="#/buscar">${icono('invertir')}Modificar búsqueda</a>
+        </div>
       </div>`}`,
     montar() {
-      if (!encontrados.length) track('sin_resultados');
+      if (!cantidad) track('sin_resultados');
     },
   };
 }
@@ -126,41 +168,74 @@ export function viaje({ id }) {
   const conductor = conductorDe(datos);
   const activa = solicitudActivaDe(id);
   const cursada = cursadaCompartida(estado.usuario.cursada, conductor.cursada, busqueda.fecha);
+  const tramos = tramosDeViaje(datos, busqueda.tipo);
+  const anios = new Date().getFullYear() - conductor.desde;
   return {
     titulo: 'Detalle del viaje',
     volver: '#/resultados',
-    cancelar: '#/buscar',
-    conPieFijo: true,
     cuerpo: html`<h1 class="solo-lector" tabindex="-1">Viaje con ${conductor.nombre}</h1>
-      ${credencial(conductor)}
-      ${cursada && html`<p class="aviso-cursada">${icono('persona')}<span><b>Cursan juntos</b>${cursada.materia} · comisión ${cursada.comision} (${cursada.dia.toLowerCase()}) · turno ${cursada.turno.toLowerCase()}</span></p>`}
-      <div class="tarjeta-seccion resumen-confianza">
-        <div><b>${String(conductor.calificacion.toFixed(1)).replace('.', ',')}</b><span>calificación</span></div>
-        <div><b>${conductor.viajes}</b><span>viajes hechos</span></div>
-        <div><b>${new Date().getFullYear() - conductor.desde || 'Menos de 1'}</b><span>${new Date().getFullYear() - conductor.desde === 1 ? 'año' : 'años'} en la UNLaM</span></div>
-      </div>
-      <section class="tarjeta-seccion"><h2>Auto</h2>${bloqueVehiculo(conductor.vehiculo)}</section>
-      <section class="tarjeta-seccion"><h2>Viaje</h2>
-        ${tramosDeViaje(datos, busqueda.tipo).map((tramo) => html`<div class="tramo"><span class="tramo-sentido">${tramo.sentido}</span>${tiraRecorrido(tramo, { punto: true })}</div>`)}
-        <p class="dato-linea">${icono('persona')}<span>${datos.lugaresLibres} ${datos.lugaresLibres === 1 ? 'lugar disponible' : 'lugares disponibles'}</span></p>
-      </section>
-      ${reciboCosto(datos, busqueda.tipo)}
-      <section class="tarjeta-seccion">
-        <h2>Qué dicen de sus viajes</h2>
-        <ul class="referencias">
-          ${conductor.referencias.map((referencia) => html`<li>
-            <div class="referencia-cabecera"><b>${referencia.autor}</b>${estrellas(referencia.estrellas)}</div>
-            <p>"${referencia.texto}"</p>
-            <small>${referencia.cuando} · desde ${referencia.desde}</small>
-          </li>`)}
-        </ul>
-      </section>
-      <div class="pie-fijo">
-        ${activa
-          ? html`<a class="btn btn-secundario" href="#/pase/${activa.id}">Ver mi solicitud</a>`
-          : datos.lugaresLibres > 0
-            ? html`<a class="btn btn-primario" href="#/confirmar/${id}">Quiero este viaje</a>`
-            : html`<button class="btn btn-secundario" disabled>Sin lugares</button>`}
+      <div class="detalle">
+        <section class="tarjeta-seccion viaje-heroe det-recorrido" aria-label="Recorrido del viaje">
+            <div class="heroe-cabecera">
+              <h2>Recorrido</h2>
+              <span class="tipo-chip">${TIPOS[datos.tipo]}</span>
+              ${tramos.some((tramo) => esNocturno(tramo.hora)) && html`<span class="nocturno">${icono('luna')}Noche</span>`}
+            </div>
+            ${tramos.map((tramo) => html`<div class="tramo"><span class="tramo-sentido">${tramo.sentido}</span>${tiraRecorrido(tramo, { punto: true })}</div>`)}
+            <p class="dato-linea">${icono('persona')}<span>${datos.lugaresLibres} ${datos.lugaresLibres === 1 ? 'lugar disponible' : 'lugares disponibles'}</span></p>
+          </section>
+
+          <section class="tarjeta-seccion conductor det-conductor" aria-label="Conductor, auto y confianza">
+            <div class="cred-cabecera">
+              ${avatar(conductor, 'avatar-xl')}
+              <div class="cred-identidad">
+                <h2>${conductor.nombre}</h2>
+                <p class="cred-estado">${icono('escudo')}Estudiante regular verificado</p>
+              </div>
+            </div>
+            <p class="cred-carrera">${conductor.carrera} · en la UNLaM desde ${conductor.desde}</p>
+            <ul class="cred-checks" aria-label="Verificaciones del conductor">
+              <li>${icono('check')}Correo institucional</li>
+              <li>${icono('check')}Certificado validado</li>
+            </ul>
+            <div class="cred-stats" aria-label="Track record">
+              <div><b>${String(conductor.calificacion.toFixed(1)).replace('.', ',')}</b><span>calificación</span></div>
+              <div><b>${conductor.viajes}</b><span>viajes hechos</span></div>
+              <div><b>${anios || 'Menos de 1'}</b><span>${anios === 1 ? 'año' : 'años'} en la UNLaM</span></div>
+            </div>
+            <div class="cred-detalle">
+              ${bloqueVehiculo(conductor.vehiculo)}
+              ${cursada && html`<p class="aviso-cursada">${icono('persona')}<span><b>Cursan juntos</b>${cursada.materia} · comisión ${cursada.comision} (${cursada.dia.toLowerCase()}) · turno ${cursada.turno.toLowerCase()}</span></p>`}
+            </div>
+          </section>
+
+          <section class="tarjeta-seccion det-referencias" aria-label="Opiniones de estudiantes">
+            <h2>Qué dicen de sus viajes</h2>
+            <ul class="referencias">
+              ${conductor.referencias.map((referencia) => html`<li>
+                <div class="referencia-cabecera"><b>${referencia.autor}</b>${estrellas(referencia.estrellas)}</div>
+                <p>"${referencia.texto}"</p>
+                <small>${referencia.cuando} · desde ${referencia.desde}</small>
+              </li>`)}
+            </ul>
+          </section>
+
+        <aside class="detalle-resumen det-resumen" aria-label="Resumen y acción">
+          <section class="recibo resumen-accion">
+            <div class="resumen-fila">${busqueda.fecha && html`<span>${fechaLegible(busqueda.fecha)}</span>`}${html`<span>${TIPOS[datos.tipo]}</span>`}</div>
+            <div class="recibo-total">
+              <div><span>Costo estimado por persona</span><strong>${pesos(costoEstimado(datos, busqueda.tipo))}</strong></div>
+              <small>Es un estimado de la nafta dividida entre quienes viajan. Se arregla directamente con quien maneja.</small>
+            </div>
+            <div class="resumen-cta">
+              ${activa
+                ? html`<a class="btn btn-primario" href="#/pase/${activa.id}">Ver mi solicitud</a>`
+                : datos.lugaresLibres > 0
+                  ? html`<a class="btn btn-primario" href="#/confirmar/${id}">Quiero este viaje</a>`
+                  : html`<button class="btn btn-secundario" disabled>Sin lugares</button>`}
+            </div>
+          </section>
+        </aside>
       </div>`,
     montar() {
       track('perfil_conductor', { conductorId: datos.conductorId, viajeId: id });
@@ -210,37 +285,87 @@ export function confirmarViaje({ id }) {
   };
 }
 
+// Último estado visto de cada pase: si pasa de pendiente a confirmada con la pantalla abierta, se celebra.
+const estadoVisto = new Map();
+const COLORES_CONFETI = ['#efae35', '#0d9463', '#5465d6', '#fffdf8', '#f6c96b', '#2fbf87'];
+
+function lanzarConfeti(origen) {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !origen) return;
+  const caja = origen.getBoundingClientRect();
+  const capa = document.createElement('div');
+  capa.className = 'confeti';
+  capa.setAttribute('aria-hidden', 'true');
+  capa.style.left = `${caja.left + caja.width / 2}px`;
+  capa.style.top = `${caja.top + caja.height / 2}px`;
+  for (let i = 0; i < 36; i += 1) {
+    const pieza = document.createElement('i');
+    const angulo = (Math.PI * 2 * i) / 36 + Math.random() * 0.4;
+    const fuerza = 90 + Math.random() * 130;
+    pieza.style.setProperty('--x', `${Math.cos(angulo) * fuerza}px`);
+    pieza.style.setProperty('--y', `${Math.sin(angulo) * fuerza * 0.7 - 70}px`);
+    pieza.style.setProperty('--r', `${Math.round(Math.random() * 720 - 360)}deg`);
+    pieza.style.setProperty('--d', `${Math.round(Math.random() * 120)}ms`);
+    pieza.style.setProperty('--c', COLORES_CONFETI[i % COLORES_CONFETI.length]);
+    if (i % 3 === 0) pieza.classList.add('redondo');
+    capa.append(pieza);
+  }
+  document.body.append(capa);
+  setTimeout(() => capa.remove(), 1900);
+  navigator.vibrate?.([18, 40, 28]);
+}
+
 export function pase({ id }) {
   const solicitud = solicitudPorId(id);
   if (!solicitud) return { redirigir: '#/viajes' };
   const datos = viajePorId(solicitud.viajeId);
   const conductor = conductorDe(datos);
   const situacion = estadoSolicitud(solicitud);
+  const celebrar = estadoVisto.get(id) === 'pendiente' && situacion === 'confirmada';
+  estadoVisto.set(id, situacion);
+  const esperaMs = situacion === 'pendiente' ? Math.max(0, solicitud.aceptaEn - Date.now()) : 0;
   const tramos = tramosDeViaje(datos, solicitud.tipo);
   const hayNoche = tramos.some((tramo) => esNocturno(tramo.hora));
+  // Etiqueta textual explícita + explicación real del estado (no se adelanta a confirmado si sigue pendiente).
   const encabezados = {
-    pendiente: ['Solicitud enviada', `Le avisamos a ${conductor.nombre.split(' ')[0]}. Te respondemos en un momento.`],
-    confirmada: ['¡Tu lugar está confirmado!', `${conductor.nombre.split(' ')[0]} aceptó tu solicitud.`],
-    cancelada: ['Cancelaste este viaje', 'Ya no tenés un lugar reservado. Le avisamos a la persona que maneja.'],
+    pendiente: ['Pendiente', `Solicitud enviada. ${conductor.nombre.split(' ')[0]} todavía tiene que aceptar el lugar.`],
+    confirmada: ['Confirmado', `${conductor.nombre.split(' ')[0]} aceptó tu solicitud. Tenés tu lugar.`],
+    cancelada: ['Cancelado', 'Ya no tenés un lugar reservado. Le avisamos a la persona que maneja.'],
   };
+  const icone = { pendiente: 'reloj', confirmada: 'check', cancelada: 'cerrar' };
+  const marca = situacion === 'pendiente' ? 'Es una solicitud, todavía puede quedar sin confirmar.' : situacion === 'confirmada' ? 'Solicitado y aceptado por el conductor.' : 'Estado final de esta solicitud.';
   return {
     titulo: 'Tu viaje',
     volver: '#/viajes',
-    cuerpo: html`<div class="pase-estado pase-${situacion}" role="status">
-        <span class="pase-icono">${situacion === 'confirmada' ? icono('check') : situacion === 'pendiente' ? icono('reloj') : icono('cerrar')}</span>
-        <h1 tabindex="-1">${encabezados[situacion][0]}</h1>
-        <p>${encabezados[situacion][1]}</p>
-      </div>
-      <article class="pase ${situacion === 'cancelada' ? 'pase-apagado' : ''}">
-        <header>
-          <div>${avatar(conductor)}<div class="tarjeta-persona"><b>${conductor.nombre}</b>${sello()}${situacion === 'confirmada' && html`<span class="puntaje">${conductor.telefono}</span>`}</div></div>
-        </header>
-        <div class="pase-cuerpo">
-          <p class="pase-fecha">${fechaLegible(solicitud.fecha)}</p>
-          ${tramos.map((tramo) => html`<div class="tramo"><span class="tramo-sentido">${tramo.sentido}</span>${tiraRecorrido(tramo, { punto: true })}</div>`)}
-          ${bloqueVehiculo(conductor.vehiculo)}
-          <p class="pase-costo"><span>Costo estimado por persona</span><b>${pesos(costoEstimado(datos, solicitud.tipo))}</b></p>
+    cuerpo: html`
+      <article class="credencial-viaje cred-${situacion} ${situacion === 'cancelada' ? 'cred-apagado' : ''} ${celebrar ? 'cred-celebrar' : ''}" style="--espera: ${esperaMs}ms" aria-label="Credencial de tu viaje">
+        <div class="cred-cabecera-v" role="status" data-estado="${situacion}">
+          <span class="cred-cabecera-marca" aria-hidden="true">UNLaM · Carpool</span>
+          <span class="cred-estado-chip cred-estado-${situacion}">
+            ${icono(icone[situacion])}
+            <b>${encabezados[situacion][0]}</b>
+          </span>
         </div>
+        <p class="cred-descripcion">${encabezados[situacion][1]}</p>
+        <hr class="cred-separador" />
+        <div class="cred-cuerpo">
+          <p class="cred-fecha">${fechaLegible(solicitud.fecha)}</p>
+          ${tramos.map((tramo) => html`<div class="tramo"><span class="tramo-sentido">${tramo.sentido}</span>${tiraRecorrido(tramo, { punto: true })}</div>`)}
+          <div class="cred-bloque">
+            <div class="cred-bloque-cabecera">
+              ${avatar(conductor)}
+              <div class="tarjeta-persona">
+                <b>${conductor.nombre}</b>${sello()}
+                ${situacion === 'confirmada' && html`<span class="puntaje">${conductor.telefono}</span>`}
+              </div>
+            </div>
+            ${bloqueVehiculo(conductor.vehiculo)}
+          </div>
+          <div class="cred-costo">
+            <div><span>Costo estimado por persona</span><b>${pesos(costoEstimado(datos, solicitud.tipo))}</b></div>
+            <small>Es un estimado de la nafta dividida entre quienes viajan. Se arregla directamente con quien maneja.</small>
+          </div>
+        </div>
+        <p class="cred-pie">${marca}</p>
       </article>
       ${situacion !== 'cancelada' && html`<section class="seguridad ${hayNoche ? 'seguridad-noche' : ''}">
         <h2>${hayNoche ? html`${icono('luna')}Para viajar tranquilo de noche` : html`${icono('escudo')}Para viajar tranquilo`}</h2>
@@ -250,12 +375,16 @@ export function pase({ id }) {
           <li>${icono('check')}<span>Compartí tu ubicación con alguien de confianza</span></li>
         </ul>
       </section>`}
-      ${situacion !== 'cancelada' && html`<a class="btn btn-secundario" href="#/viajes">Listo</a>
-        <button class="btn btn-sutil btn-peligro-texto" id="cancelar">Cancelar este viaje</button>`}
-      ${situacion === 'cancelada' && html`<a class="btn btn-primario" href="#/buscar">Buscar otro viaje</a>`}`,
+      ${situacion !== 'cancelada' && html`<div class="cred-acciones">
+        <a class="btn btn-secundario btn-acciones-nav" href="#/viajes">Listo</a>
+        <span class="cred-acciones-divider" aria-hidden="true"></span>
+        <button class="btn btn-sutil btn-peligro-texto" id="cancelar">Cancelar este viaje</button>
+      </div>`}
+      ${situacion === 'cancelada' && html`<a class="btn btn-primario cred-acciones-solo-primario" href="#/buscar">Buscar otro viaje</a>`}`,
     montar(raiz) {
       let espera;
       if (situacion === 'pendiente') espera = setTimeout(refrescar, Math.max(0, solicitud.aceptaEn - Date.now()));
+      if (celebrar) setTimeout(() => lanzarConfeti(raiz.querySelector('.cred-estado-chip')), 220);
       raiz.querySelector('#cancelar')?.addEventListener('click', async () => {
         const seguro = await confirmar({
           titulo: '¿Cancelar este viaje?',

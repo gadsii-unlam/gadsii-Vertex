@@ -32,3 +32,5 @@
 | 03/11/2026 | Claude - Opus 5.5 (Claude Code) | Reformatear y emprolijar el plan de sesión elaborado por los estudiantes para lograr una presentación académica, sin cambiar su contenido. | TP5 |
 | 03/11/2026 | Claude - Opus 5.5 (Claude Code) | Reformatear y emprolijar las entrevistas con los Usuarios 1, 2 y 3 realizadas por los estudiantes, con formato académico y sin modificar las respuestas ni el contenido. | TP5 |
 | 03/11/2026 | Claude - Opus 5.5 (Claude Code) | Actualizar docs/brief.md a la versión 4 | TP5 |
+| 03/11/2026 | ChatGPT - GPT-6 Astra (supervisor) + Qwen 3.8 27B local (agente Hermes) | Mejorar la UI del MVP en vueltas cortas, revisando capturas de celular y escritorio en cada una: portada, detalle del viaje, pase, Mis viajes y resultados de búsqueda, sin cambiar el flujo. | TP5 |
+| 04/11/2026 | Claude - Opus 5.5 (Claude Code) | Revisar el MVP y corregir detalles visuales (fecha Hoy/Mañana, orden de Mis viajes, punto de encuentro en resultados), sumar animaciones (transiciones entre pantallas y confirmación del pase) y publicarlo en carpool.timecore.com.ar. | TP5 |

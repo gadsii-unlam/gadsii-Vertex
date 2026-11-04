@@ -1,5 +1,5 @@
 // Plantillas con escape automático: todo valor interpolado se trata como texto.
-class Seguro {
+export class Seguro {
   constructor(texto) {
     this.texto = texto;
   }
@@ -8,7 +8,7 @@ class Seguro {
   }
 }
 
-const escapar = (valor) =>
+export const escapar = (valor) =>
   String(valor).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 const convertir = (valor) => {

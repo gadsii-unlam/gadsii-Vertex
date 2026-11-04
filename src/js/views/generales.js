@@ -15,31 +15,63 @@ import {
 } from '../store.js';
 import { aviso, confirmar, html, icono } from '../ui.js';
 
-const ETIQUETAS = { pendiente: 'Esperando respuesta', confirmada: 'Confirmado', cancelada: 'Cancelado' };
+const ETIQUETAS = { pendiente: 'Pendiente', confirmada: 'Confirmado', cancelada: 'Cancelado' };
+
+/** Bloque fecha compacto de agenda: día grande + mes corto. El día de la semana va al lado. */
+function bloqueFecha(iso) {
+  const fecha = new Date(`${iso}T00:00:00`);
+  const hoy = new Date();
+  const offset = Math.round((fecha - new Date(hoy.setHours(0, 0, 0, 0))) / 86400000);
+  const dia = offset === 0 ? 'Hoy' : offset === 1 ? 'Mañana' : fecha.toLocaleDateString('es-AR', { weekday: 'long' }).replace(/\./g, '');
+  return html`<span class="agenda-fecha">
+      <b>${fecha.getDate()}</b><span>${fecha.toLocaleDateString('es-AR', { month: 'short' }).replace(/\./g, '')}</span>
+    </span>
+    <span class="agenda-dia">${dia.charAt(0).toUpperCase() + dia.slice(1)}</span>`;
+}
 
 function tarjetaSolicitud(solicitud) {
   const viaje = viajePorId(solicitud.viajeId);
   const conductor = conductorDe(viaje);
   const situacion = estadoSolicitud(solicitud);
   const [tramo] = tramosDeViaje(viaje, solicitud.tipo);
-  return html`<a class="tarjeta-viaje ${situacion === 'cancelada' ? 'apagada' : ''}" href="#/pase/${solicitud.id}">
-    <div class="tarjeta-cabecera"><span class="estado estado-${situacion}">${ETIQUETAS[situacion]}</span><span class="tipo-chip">${TIPOS[solicitud.tipo]}</span></div>
-    <p class="tarjeta-fecha">${fechaLegible(solicitud.fecha)}</p>
+  return html`<a class="tarjeta-viaje agenda-v ${situacion === 'cancelada' ? 'agenda-cancelada' : ''}" href="#/pase/${solicitud.id}" data-estado="${situacion}">
+    <div class="agenda-cabecera">
+      <span class="agenda-fecha-bloque">${bloqueFecha(solicitud.fecha)}</span>
+      <span class="agenda-chips">
+        <span class="agenda-estado-chip agenda-estado-${situacion}"><i aria-hidden="true"></i>${ETIQUETAS[situacion]}</span>
+        <span class="agenda-tipo-chip">${TIPOS[solicitud.tipo]}</span>
+      </span>
+    </div>
     ${tiraRecorrido(tramo)}
-    <div class="tarjeta-conductor">${avatar(conductor)}<div class="tarjeta-persona"><b>${conductor.nombre}</b>${sello()}</div></div>
+    <div class="agenda-conductor">${avatar(conductor)}<div class="tarjeta-persona"><b>${conductor.nombre}</b>${sello()}</div><span class="agenda-accion">${icono('ticket')}Abrir pase${icono('flecha')}</span></div>
   </a>`;
 }
 
 export function viajes() {
   const { solicitudes } = estado;
+  const activas = solicitudes.filter((solicitud) => !solicitud.canceladaEn);
+  const canceladas = solicitudes.filter((solicitud) => Boolean(solicitud.canceladaEn));
+  const ordenadas = [...activas].sort((a, b) =>
+    a.fecha === b.fecha
+      ? tramosDeViaje(viajePorId(a.viajeId), a.tipo)[0].hora.localeCompare(tramosDeViaje(viajePorId(b.viajeId), b.tipo)[0].hora)
+      : a.fecha.localeCompare(b.fecha),
+  );
+  const lista = ordenadas.map(tarjetaSolicitud);
+  if (canceladas.length) lista.push(html`<h2 class="viajes-subtitulo">Cancelados</h2>`, ...canceladas.map(tarjetaSolicitud));
+  const cuerpoLista = html`<p class="bajada" id="viajes-bajada">Tus viajes con solicitud en curso y las que ya cerraste. Tocá la tarjeta para abrir el pase; si la solicitud sigue, podés cancelarla desde ahí.</p>
+    <div class="lista-viajes" aria-describedby="viajes-bajada">${lista}</div>`;
+  const cuerpoVacio = html`<div class="vacio vacio-v6">
+      ${icono('ticket')}
+      <h2>Sin viajes por ahora</h2>
+      <p>Cuando pidas un lugar a un conductor, el viaje aparece acá: el estado (pendiente o confirmado) siempre a la vista y el pase a un toque.</p>
+      <a class="btn btn-primario" href="#/buscar">${icono('pin')}Buscar un viaje</a>
+    </div>`;
   return {
     titulo: 'Mis viajes',
     conNavegacion: true,
     sinCabecera: true,
     cuerpo: html`<h1 class="titulo-pagina" tabindex="-1">Mis viajes</h1>
-      ${solicitudes.length
-        ? html`<div class="lista-viajes">${[...solicitudes].reverse().map(tarjetaSolicitud)}</div>`
-        : html`<div class="vacio">${icono('ticket')}<p>Todavía no pediste ningún viaje.</p><a class="btn btn-secundario" href="#/buscar">Buscar un viaje</a></div>`}`,
+      ${solicitudes.length ? cuerpoLista : cuerpoVacio}`,
     montar() {
       const momentos = solicitudes.filter((solicitud) => estadoSolicitud(solicitud) === 'pendiente').map((solicitud) => solicitud.aceptaEn);
       if (!momentos.length) return undefined;
@@ -65,7 +97,7 @@ export function perfil() {
     cuerpo: html`<h1 class="titulo-pagina" tabindex="-1">Mi perfil</h1>
       ${credencial(persona, { vivo: true })}
       <section class="tarjeta-seccion"><h2>Tu privacidad</h2><p class="bajada">Tu correo no se muestra a otros estudiantes.</p></section>
-      <button class="btn btn-sutil" id="salir">Cerrar sesión</button>`,
+      <button class="btn btn-sutil btn-salir" id="salir">Cerrar sesión</button>`,
     montar(raiz) {
       const reloj = raiz.querySelector('[data-reloj]');
       const pintar = () => { reloj.textContent = new Date().toLocaleTimeString('es-AR', { hour12: false }); };

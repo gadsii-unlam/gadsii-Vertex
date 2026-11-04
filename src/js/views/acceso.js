@@ -24,14 +24,15 @@ export function bienvenida() {
     sinCabecera: true,
     cuerpo: html`<section class="portada">
       <div class="portada-noche" aria-hidden="true">
-        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice">
-          <path class="portada-ruta" d="M-10 245 C 90 245, 110 150, 200 150 S 320 80, 410 60" fill="none" style="stroke:var(--ambar)" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="200" cy="150" r="5" fill="var(--ambar)"/><circle cx="200" cy="150" r="13" fill="none" stroke="var(--ambar)" opacity=".4"/>
-          <circle cx="330" cy="86" r="5" fill="var(--verificado)"/><circle cx="330" cy="86" r="13" fill="none" stroke="var(--verificado)" opacity=".4"/>
+        <svg viewBox="0 0 400 300" preserveAspectRatio="none">
+          <path class="portada-ruta" d="M-10 245 C 90 245, 110 150, 200 150 S 320 80, 410 60" fill="none" style="stroke:var(--ambar)" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+          <path class="portada-luz" d="M-10 245 C 90 245, 110 150, 200 150 S 320 80, 410 60" pathLength="100" fill="none" stroke-width="6" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+          <circle cx="200" cy="150" r="5" fill="var(--ambar)"/><circle class="portada-onda" cx="200" cy="150" r="13" fill="none" stroke="var(--ambar)" opacity=".4"/>
+          <circle cx="330" cy="86" r="5" fill="var(--verificado)"/><circle class="portada-onda portada-onda-2" cx="330" cy="86" r="13" fill="none" stroke="var(--verificado)" opacity=".4"/>
         </svg>
       </div>
       <p class="portada-marca">UNLaM Carpool</p>
-      <h1 tabindex="-1">Volvé de la facu con alguien de la facu.</h1>
+      <h1 tabindex="-1">Volvé de <span class="portada-acento">la facu</span> con alguien de la facu.</h1>
       <p class="portada-texto">Compartí viajes con estudiantes verificados que hacen tu mismo recorrido, a tu mismo horario.</p>
       <ul class="portada-lista">
         <li>${icono('escudo')}Solo estudiantes regulares verificados</li>

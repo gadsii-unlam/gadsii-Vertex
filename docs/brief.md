@@ -1,11 +1,11 @@
 # Brief de Producto
 UNLaM Carpool — Brief de Producto
  
-**Versión 4.0 — TP5**
+**Versión 5.0 — TP6**
  
-## Cambios respecto de la versión 3
+## Cambios respecto de la versión 4
  
-Se construye el MVP con el scope del TP3, solo el flujo del pasajero, y las 8 correcciones que el equipo aceptó en el TP4-B, incluida la etiqueta de coincidencia con la cursada. El costo estimado y el tipo de recorrido que indicaría el conductor entran como datos precargados de cada viaje, porque la publicación y los pagos siguen excluidos. El costo se calcula con nafta a $2.300 por litro y un consumo de 15 km por litro. Se definen las métricas y el criterio de éxito antes de probar, y se prueba el MVP con U1, U2 y U3, usuarios reales del segmento que lo recorrieron sin ayuda. **La hipótesis se sostiene:** la tasa de solicitud es de 100 % y la de reemplazo, de 67 %. El reemplazo aparece en viajes semanales con hora de llegada fija; para la vuelta nocturna, el producto es un respaldo. El horario decide la elección: la cursada compartida genera interés, pero no cambió ninguna elección. **El equipo decide perseverar** y lo próximo es validar la oferta de conductores, que sigue siendo el supuesto crítico, y permitir buscar y elegir por hora de llegada.
+Se describe la arquitectura del MVP tal como quedó construido y la del producto completo. El MVP es un sitio estático publicado en el NAS del equipo: toda la aplicación corre en el navegador y guarda los datos en el `localStorage` de cada dispositivo, sin servidor ni base de datos. Los viajes, los conductores y el catálogo de cursadas están precargados, y la verificación y la aceptación del conductor son automáticas. El producto completo suma un servidor de aplicación con base de datos compartida, la app del conductor, un panel de administración y cinco servicios externos: SIU Guaraní, correo institucional, mapas, cálculo de rutas y notificaciones push. El salto más grande es pasar de una aplicación aislada en cada celular a una red de dos lados que comparte el mismo estado. Se agregan las tecnologías que sumaría el producto y las restricciones técnicas del contexto, y se identifica el matching como el componente más riesgoso, porque en la prueba del TP5 no tuvo en cuenta la hora de llegada.
  
 ## Segmento elegido
  
@@ -77,6 +77,33 @@ En los viajes de regreso resulta especialmente útil coordinar con estudiantes q
 * Servicio de notificaciones para informar solicitudes de viaje, aceptaciones, cancelaciones y cambios.
 * SIU Guaraní de la UNLaM como integración futura para validar la identidad y condición de alumno regular de los usuarios.
 Para el MVP no se realizará una integración directa con SIU Guaraní debido a la complejidad técnica y los permisos de acceso requeridos. La verificación se realizará mediante correo institucional y certificado de alumno regular.
+ 
+## Arquitectura
+
+### El MVP
+
+Sitio estático en HTML, CSS y JavaScript, sin framework, publicado en el NAS del equipo con Docker (carpool.timecore.com.ar). El servidor solo entrega los archivos: toda la aplicación corre en el navegador del estudiante, organizada en capas lógicas de navegación, pantallas, estado, reglas de negocio y datos. El componente propio, el matching, está en las reglas de negocio, separado de la interfaz. El estado se guarda en el `localStorage` de cada dispositivo, así que lo que hace un usuario no lo ve ningún otro. Los viajes, los conductores, las localidades y el catálogo de cursadas están precargados; el código de acceso, la revisión del certificado y la aceptación del conductor son automáticos.
+
+### El producto completo
+
+* **Aplicaciones:** la del pasajero, la del conductor y un panel de administración para revisar certificados, licencias y seguros.
+* **Servidor de aplicación:** identidad y verificación, verificación de conductores, publicación de viajes, búsqueda y matching, solicitudes, cursada, reputación y avisos.
+* **Datos:** una base de datos compartida y un almacenamiento de archivos privados para los documentos.
+* **Servicios externos:** SIU Guaraní, correo institucional, mapas, cálculo de rutas y notificaciones push.
+
+**El salto más grande** es pasar de una aplicación de un solo lado, aislada en cada celular, a una red de dos lados que comparte el mismo estado: lo que publica un conductor lo ve un pasajero desde otro celular, y la respuesta vuelve como aviso.
+
+**Tecnologías que agregaría:** PostgreSQL con PostGIS en un contenedor del NAS, para la base compartida y las consultas por coordenadas; notificaciones push web, para avisar en el celular sin que el pasajero tenga que mirar la pantalla en la parada; y Node.js para el servidor, elegido por familiaridad del equipo con JavaScript.
+
+**Componente más riesgoso:** el matching. En la prueba del TP5 no tuvo en cuenta la hora de llegada: a U2 le mostró un único viaje que llegaba tarde, y a U1 le puso primero, por compartir cursada, un viaje que llegaba después de su clase. Al crecer cambian todas sus entradas: viajes reales, recorridos en lugar de localidades, la cursada de SIU Guaraní y la búsqueda en el servidor.
+
+## Restricciones técnicas del contexto
+
+* **SIU Guaraní:** integrarlo requiere permisos de acceso de la UNLaM, que el equipo no controla. Mientras tanto, la pertenencia se prueba con el correo institucional y el certificado de alumno regular, y cada estudiante carga su cursada.
+* **Correo institucional:** solo se aceptan los dominios `alumno.unlam.edu.ar` y `unlam.edu.ar`.
+* **Datos personales:** el certificado, la patente y el teléfono están protegidos por la Ley 25.326. Tienen que guardarse en un servidor con acceso restringido, y el teléfono del conductor solo se muestra con el viaje confirmado.
+* **Contexto de uso:** se usa desde el celular y con datos móviles, de mañana para llegar a clase y de noche para volver. La aplicación tiene que ser liviana y avisar sin que haya que mirar la pantalla.
+* **Infraestructura y mantenimiento:** se publica en el NAS del equipo con Docker y la mantiene un equipo de estudiantes que trabaja en JavaScript.
  
 ## Grupos de usuarios
  

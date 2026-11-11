@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1080" width="1400" height="1080" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2933"/></marker>
+    <marker id="fr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker>
+    <style>
+      .t{font-size:15px;font-weight:700;fill:#1f2933}
+      .d{font-size:12.5px;fill:#3e4c59}
+      .capa{font-size:12px;font-weight:700;fill:#52606d;letter-spacing:.06em}
+      .caja{fill:#fff;stroke:#1f2933;stroke-width:1.4}
+      .pre{fill:#fff6e0;stroke:#b7791f;stroke-width:1.6;stroke-dasharray:6 4}
+      .propio{fill:#fff;stroke:#1f2933;stroke-width:3.2}
+      .ext{fill:#eaf0fb;stroke:#3b5bab;stroke-width:1.4}
+      .banda{fill:#f4f5f7;stroke:#d5d9df}
+      .tag{fill:#b7791f}
+      .tagt{font-size:10.5px;font-weight:700;fill:#fff}
+      .fl{stroke:#1f2933;stroke-width:1.6;fill:none}
+      .flr{stroke:#c62828;stroke-width:1.8;fill:none;stroke-dasharray:7 5}
+      .et{font-size:12px;font-style:italic;fill:#1f2933}
+      .etr{font-size:12px;font-style:italic;fill:#c62828}
+    </style>
+  </defs>
+  <rect width="1400" height="1080" fill="#ffffff"/>
+
+  <text x="40" y="40" font-size="24" font-weight="700" fill="#1f2933">Arquitectura real del MVP de UNLaM Carpool</text>
+  <text x="40" y="64" class="d">Relevada del código de src/ en la rama tp5-correcciones. Cada flecha va del módulo que depende al módulo del que depende.</text>
+
+  <!-- Fuera del navegador -->
+  <rect x="40" y="90" width="820" height="72" rx="8" class="ext"/>
+  <text x="58" y="116" class="t">Servidor estático en el NAS del equipo (Docker) · carpool.timecore.com.ar</text>
+  <text x="58" y="138" class="d">Entrega index.html, styles/app.css y los módulos JavaScript. No ejecuta lógica de la aplicación</text>
+  <text x="58" y="154" class="d">ni guarda datos de los usuarios.</text>
+  <rect x="1000" y="90" width="360" height="72" rx="8" class="ext"/>
+  <text x="1018" y="116" class="t">Google Fonts (servicio externo)</text>
+  <text x="1018" y="138" class="d">Las dos tipografías de la interfaz. Es la única</text>
+  <text x="1018" y="154" class="d">dependencia de terceros.</text>
+
+  <!-- Navegador -->
+  <rect x="40" y="200" width="1320" height="770" rx="12" fill="#fff" stroke="#1f2933" stroke-width="2"/>
+  <line class="fl" x1="450" y1="200" x2="450" y2="166" marker-end="url(#f)"/>
+  <text x="460" y="188" class="et">descarga los archivos al abrir la página</text>
+  <line class="fl" x1="1180" y1="200" x2="1180" y2="166" marker-end="url(#f)"/>
+  <text x="1190" y="188" class="et">pide las tipografías</text>
+  <text x="58" y="226" class="t">Navegador del estudiante (celular o computadora): toda la aplicación corre acá</text>
+
+  <!-- Capa A -->
+  <rect x="56" y="238" width="1288" height="92" rx="8" class="banda"/>
+  <text x="70" y="262" class="capa">ARRANQUE Y</text><text x="70" y="278" class="capa">NAVEGACIÓN</text>
+  <rect x="220" y="250" width="240" height="66" rx="6" class="caja"/>
+  <text x="236" y="275" class="t">main.js</text><text x="236" y="296" class="d">Arranca la aplicación</text>
+  <rect x="500" y="250" width="560" height="66" rx="6" class="caja"/>
+  <text x="516" y="275" class="t">router.js</text>
+  <text x="516" y="296" class="d">Rutas por #dirección. Bloquea las pantallas hasta que el correo,</text>
+  <text x="516" y="311" class="d">los datos y el certificado están aprobados (consulta store y verificacion)</text>
+  <line class="fl" x1="460" y1="283" x2="498" y2="283" marker-end="url(#f)"/>
+
+  <!-- Capa B -->
+  <rect x="56" y="346" width="1288" height="196" rx="8" class="banda"/>
+  <text x="70" y="370" class="capa">PANTALLAS</text><text x="70" y="386" class="capa">(views/)</text>
+  <rect x="220" y="360" width="260" height="74" rx="6" class="caja"/>
+  <text x="236" y="384" class="t">acceso.js</text><text x="236" y="404" class="d">Bienvenida, correo, código,</text><text x="236" y="420" class="d">datos y certificado</text>
+  <rect x="500" y="360" width="260" height="74" rx="6" class="caja"/>
+  <text x="516" y="384" class="t">recorrido.js</text><text x="516" y="404" class="d">Formulario de búsqueda: origen,</text><text x="516" y="420" class="d">destino, día, hora y tipo</text>
+  <rect x="780" y="360" width="260" height="74" rx="6" class="caja"/>
+  <text x="796" y="384" class="t">viajar.js</text><text x="796" y="404" class="d">Resultados, detalle del viaje,</text><text x="796" y="420" class="d">confirmación y pase</text>
+  <rect x="1060" y="360" width="260" height="74" rx="6" class="caja"/>
+  <text x="1076" y="384" class="t">generales.js</text><text x="1076" y="404" class="d">Mis viajes, Mi cursada, perfil y</text><text x="1076" y="420" class="d">panel de registro de la prueba</text>
+  <rect x="220" y="452" width="540" height="74" rx="6" class="caja"/>
+  <text x="236" y="476" class="t">componentes.js</text><text x="236" y="496" class="d">Piezas de pantalla compartidas: credencial del conductor,</text><text x="236" y="512" class="d">tarjeta de viaje, recibo del costo, tira del recorrido</text>
+  <rect x="780" y="452" width="540" height="74" rx="6" class="caja"/>
+  <text x="796" y="476" class="t">ui.js</text><text x="796" y="496" class="d">Plantillas HTML con escape, íconos, errores de campos,</text><text x="796" y="512" class="d">diálogos de confirmación y avisos</text>
+
+  <line class="fl" x1="700" y1="316" x2="700" y2="358" marker-end="url(#f)"/>
+  <text x="692" y="342" class="et" text-anchor="end">muestra la pantalla</text>
+  <line class="flr" x1="960" y1="360" x2="960" y2="318" marker-end="url(#fr)"/>
+  <text x="952" y="342" class="etr" text-anchor="end">navegar(): dependencia circular</text>
+
+  <!-- Capa C -->
+  <rect x="56" y="558" width="1288" height="110" rx="8" class="banda"/>
+  <text x="70" y="582" class="capa">ESTADO</text>
+  <rect x="220" y="574" width="700" height="80" rx="6" class="caja"/>
+  <text x="236" y="598" class="t">store.js</text>
+  <text x="236" y="618" class="d">Un único objeto de estado: cuenta, búsqueda, viajes, solicitudes y registro de eventos.</text>
+  <text x="236" y="634" class="d">guardar() lo escribe entero en el localStorage; track() anota cada acción.</text>
+  <rect x="940" y="574" width="380" height="80" rx="6" class="pre"/>
+  <rect x="1214" y="582" width="98" height="18" rx="9" class="tag"/><text x="1224" y="595" class="tagt">AUTOMÁTICO</text>
+  <text x="956" y="598" class="t">Procesos de terceros</text>
+  <text x="956" y="618" class="d">Temporizadores dentro de store.js: el certificado</text>
+  <text x="956" y="634" class="d">se aprueba a los 3 s y el conductor acepta a los 5 s.</text>
+
+  <line class="fl" x1="400" y1="526" x2="400" y2="572" marker-end="url(#f)"/>
+  <text x="408" y="552" class="et">leen y cambian el estado</text>
+
+  <!-- Capa D -->
+  <rect x="56" y="684" width="1288" height="148" rx="8" class="banda"/>
+  <text x="70" y="708" class="capa">REGLAS DE</text><text x="70" y="724" class="capa">NEGOCIO</text><text x="70" y="740" class="capa">(core/)</text>
+  <text x="70" y="760" class="d">sin interfaz</text>
+  <rect x="220" y="698" width="260" height="58" rx="6" class="propio"/>
+  <text x="236" y="720" class="t">★ matching.js</text><text x="236" y="740" class="d">Filtra y ordena los viajes</text>
+  <rect x="500" y="698" width="260" height="58" rx="6" class="pre"/>
+  <rect x="654" y="704" width="98" height="18" rx="9" class="tag"/><text x="663" y="717" class="tagt">PRECARGADO</text>
+  <text x="516" y="720" class="t">cursada.js</text><text x="516" y="740" class="d">Carreras, materias, comisiones</text>
+  <rect x="780" y="698" width="260" height="58" rx="6" class="caja"/>
+  <text x="796" y="720" class="t">costo.js</text><text x="796" y="740" class="d">Nafta dividida por persona</text>
+  <rect x="1060" y="698" width="260" height="58" rx="6" class="pre"/>
+  <rect x="1214" y="704" width="98" height="18" rx="9" class="tag"/><text x="1224" y="717" class="tagt">AUTOMÁTICO</text>
+  <text x="1076" y="720" class="t">verificacion.js</text><text x="1076" y="740" class="d">Dominio, código y archivo</text>
+  <rect x="220" y="764" width="260" height="56" rx="6" class="caja"/>
+  <text x="236" y="786" class="t">recorrido.js</text><text x="236" y="806" class="d">Valida la búsqueda y los días</text>
+  <rect x="500" y="764" width="260" height="56" rx="6" class="pre"/>
+  <rect x="654" y="770" width="98" height="18" rx="9" class="tag"/><text x="663" y="783" class="tagt">PRECARGADO</text>
+  <text x="516" y="786" class="t">localidades.js</text><text x="516" y="806" class="d">14 localidades y sus km</text>
+  <rect x="780" y="764" width="260" height="56" rx="6" class="caja"/>
+  <text x="796" y="786" class="t">config.js</text><text x="796" y="806" class="d">Nafta, consumo, ventana de 60 min</text>
+  <text x="1076" y="786" class="d">matching.js usa cursada.js</text>
+  <text x="1076" y="804" class="d">y config.js; costo.js usa config.js</text>
+
+  <line class="fl" x1="930" y1="526" x2="930" y2="682" marker-end="url(#f)"/>
+  <text x="938" y="546" class="et">las pantallas usan las reglas directamente</text>
+  <line class="fl" x1="600" y1="654" x2="600" y2="682" marker-end="url(#f)"/>
+  <text x="608" y="674" class="et">usa verificacion.js y config.js</text>
+
+  <!-- Capa E -->
+  <rect x="56" y="848" width="1288" height="110" rx="8" class="banda"/>
+  <text x="70" y="872" class="capa">DATOS</text>
+  <path d="M220,868 a260,12 0 0 1 520,0 v74 a260,12 0 0 1 -520,0 z" fill="#e7f5ee" stroke="#2f855a" stroke-width="1.6"/>
+  <path d="M220,868 a260,12 0 0 0 520,0" fill="none" stroke="#2f855a" stroke-width="1.6"/>
+  <text x="240" y="904" class="t">localStorage del navegador</text>
+  <text x="240" y="924" class="d">Una sola clave con todo el estado en JSON. Solo existe en ese</text>
+  <text x="240" y="940" class="d">navegador: ningún otro usuario la ve, y si se borra se pierde.</text>
+  <rect x="840" y="860" width="480" height="86" rx="6" class="pre"/>
+  <rect x="1214" y="866" width="98" height="18" rx="9" class="tag"/><text x="1224" y="879" class="tagt">PRECARGADO</text>
+  <text x="856" y="884" class="t">data.js</text>
+  <text x="856" y="904" class="d">6 conductores con auto, referencias y cursada, y 26 viajes.</text>
+  <text x="856" y="920" class="d">Reemplazan la publicación de viajes, excluida en el TP3.</text>
+
+  <!-- store -> localStorage (carril izquierdo) -->
+  <path class="fl" d="M220,640 H208 V900 H218" marker-end="url(#f)"/>
+  <text x="200" y="842" class="et" transform="rotate(-90 200 842)">lee al abrir y reescribe todo en cada cambio</text>
+  <!-- store -> data.js -->
+  <path class="fl" d="M770,654 V904 H838" marker-end="url(#f)"/>
+  <text x="778" y="842" class="et">copia los viajes</text>
+  <!-- viajar -> data.js (rompe capas) -->
+  <path class="flr" d="M1030,360 V340 H1350 V904 H1322" marker-end="url(#fr)"/>
+  <text x="1372" y="470" class="etr" transform="rotate(90 1372 470)">viajar.js lee los conductores de data.js, sin pasar por el estado</text>
+
+  <!-- Leyenda -->
+  <rect x="40" y="990" width="1320" height="70" rx="8" fill="#fff" stroke="#d5d9df"/>
+  <rect x="58" y="1006" width="40" height="20" rx="4" class="caja"/><text x="106" y="1021" class="d">Construido</text>
+  <rect x="196" y="1006" width="40" height="20" rx="4" class="pre"/><text x="244" y="1021" class="d">Precargado o automático, según el TP3</text>
+  <rect x="490" y="1006" width="40" height="20" rx="4" class="propio"/><text x="538" y="1021" class="d">★ Componente propio (TP1)</text>
+  <rect x="722" y="1006" width="40" height="20" rx="4" class="ext"/><text x="770" y="1021" class="d">Fuera del navegador</text>
+  <line class="fl" x1="912" y1="1016" x2="962" y2="1016" marker-end="url(#f)"/><text x="970" y="1021" class="d">Depende de</text>
+  <line class="flr" x1="1064" y1="1016" x2="1114" y2="1016" marker-end="url(#fr)"/><text x="1122" y="1021" class="d">Rompe el orden de capas</text>
+  <text x="58" y="1047" class="d">Las capas son lógicas (carpetas y módulos). Físicamente hay dos partes: el servidor que entrega los archivos y el navegador que ejecuta todo.</text>
+</svg>

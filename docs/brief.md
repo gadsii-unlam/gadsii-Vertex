@@ -229,6 +229,8 @@ El detalle está en [`docs/metricas.md`](metricas.md). Una métrica es accionabl
  
 La evidencia está en `docs/evidencia/tp5/` y el análisis en `docs/informe-tp5.md`. U1, U2 y U3, usuarios reales del segmento, recorrieron el MVP sin ayuda.
  
+El plan de sesión (`docs/evidencia/tp5/plan-de-sesion.md`) es el mismo de la versión anterior. Se reordenó y se emprolijó la redacción para que sea más claro, pero las tareas, las preguntas de cierre y las reglas de conteo no cambiaron. Lo nuevo es que la situación de T2 ahora se especifica para cada usuario real que hizo la prueba, con su localidad y su horario: U1, de ida desde la oficina en San Antonio de Padua; U2, de ida temprano desde Rafael Castillo; y U3, de vuelta a la noche a San Antonio de Padua.
+ 
 ### Sobre el producto
  
 * **El reemplazo aparece en viajes semanales con hora de llegada fija.** U1 lo usaría todos los miércoles, de la oficina a la facultad, con clase a las 18:30. U2, todos los jueves, para Análisis Matemático I de las 8:00, porque el colectivo suele venir lleno o con demoras. Los dos dejaron contacto.

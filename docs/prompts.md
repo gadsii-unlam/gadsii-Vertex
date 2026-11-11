@@ -35,3 +35,6 @@
 | 03/11/2026 | ChatGPT - GPT-6 Astra (supervisor) + Qwen 3.8 27B local (agente Hermes) | Mejorar la UI del MVP en vueltas cortas, revisando capturas de celular y escritorio en cada una: portada, detalle del viaje, pase, Mis viajes y resultados de búsqueda, sin cambiar el flujo. | TP5 |
 | 04/11/2026 | Claude - Opus 5.5 (Claude Code) | Revisar el MVP y corregir detalles visuales (fecha Hoy/Mañana, orden de Mis viajes, punto de encuentro en resultados), sumar animaciones (transiciones entre pantallas y confirmación del pase) y publicarlo en carpool.timecore.com.ar. | TP5 |
 | 11/11/2026 | Claude - Opus 5.5 (Claude Code) | Pasar a las planillas U1, U2 y U3 las notas de las sesiones con usuarios reales tomadas por el equipo, contrastarlas con los datos del MVP y actualizar el informe del TP5, docs/brief.md y docs/configuracion/ejecutar-mvp.md según la devolución del TP5. | TP5 |
+| 11/11/2026 | Claude - Opus 5.5 (Claude Code) | Producir los diagramas de la arquitectura real del MVP y de la gran visión a partir del código y de la documentación del equipo. | TP6 |
+| 11/11/2026 | Claude - Opus 5.5 (Claude Code) | Ordenar la documentación del TP6 en docs/informe-tp6.md y docs/brief.md. | TP6 |
+| 11/11/2026 | Claude - Opus 5.5 (Claude Code) | Explorar alternativas tecnológicas para la gran visión y sus características. | TP6 |

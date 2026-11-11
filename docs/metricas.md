@@ -51,7 +51,7 @@ Respuestas como "lo usaría a veces" o "cuando haga falta" no cuentan: no nombra
 **Por qué no indica progreso real:**
 
 * Los tres se registran porque los invitamos y la tarea se lo pide.
-* La verificación está simulada: no se rechaza a nadie.
+* La verificación es automática: no se rechaza a nadie.
 * Puede dar 3 de 3 aunque nadie deje de tomarse un colectivo. Si sube o baja, no sabemos qué cambiar.
 
 Es el equivalente a los likes: dice cuánta gente pasó, no si el producto le resolvió algo.

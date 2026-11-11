@@ -2,7 +2,7 @@
 
 **Grupo:** Vertex Consulting Group
 **Producto:** UNLaM Carpool
-**Repositorio:** https://github.com/gadsii-unlam/gadsii-Vertex (rama `tp5-mvp-scope`)
+**Repositorio:** https://github.com/gadsii-unlam/gadsii-Vertex (rama `tp5-correcciones`)
 **MVP:** https://carpool.timecore.com.ar
 **Archivo de entrega:** `TP5-Vertex.pdf`
 
@@ -26,7 +26,7 @@
 | Menos de 67 %, pero lo quieren cuando el transporte falla | Evaluamos un pivote de necesidad: alternativa para paros y demoras |
 | Menos de 67 %, y no lo usarían nunca | Revisamos el problema y el segmento elegidos |
 
-**Métrica vanidosa — Cantidad de usuarios registrados.** Daría "el 100 % se registró y se verificó", pero los tres se registran porque los invitamos y la verificación simulada no rechaza a nadie. Puede dar 3 de 3 sin que nadie deje de tomarse un colectivo, y si cambia no sabemos qué hacer distinto.
+**Métrica vanidosa — Cantidad de usuarios registrados.** Daría "el 100 % se registró y se verificó", pero los tres se registran porque los invitamos y la revisión automática del certificado no rechaza a nadie. Puede dar 3 de 3 sin que nadie deje de tomarse un colectivo, y si cambia no sabemos qué hacer distinto.
 
 **Criterio de éxito** (el umbral de 2 de 3 es el de la hipótesis del TP2):
 
@@ -34,7 +34,7 @@
 * **Se refuta** si la tasa de reemplazo es de 33 % o menos, aunque la de solicitud sea alta.
 * **No se puede concluir** si la tasa de solicitud es de 33 % o menos por problemas de usabilidad: se corrige y se vuelve a probar.
 
-La primera versión de las métricas se commiteó antes del MVP (`ad0a844`); esta versión las reformula como dos tasas simples, con los mismos umbrales.
+La primera versión de las métricas se commiteó antes del MVP (`ad0a844`); esta versión las reformula como dos tasas simples, con los mismos umbrales. Las métricas y el criterio quedaron fijos antes de las sesiones con usuarios reales y no se cambiaron después.
 
 ## Parte 2 — Construir
 
@@ -62,13 +62,13 @@ UNLaM Carpool es una aplicación web para celular con el flujo del estudiante pa
 | Sugerencias de ubicaciones | Lista de localidades mientras se escribe |
 | Etiqueta de coincidencia con la cursada | El pasajero marca sus comisiones; si un conductor cursa la misma materia el mismo día y horario, su viaje lleva la etiqueta "Cursan juntos" y va primero |
 
-**Costo y tipo de recorrido del conductor.** El brief excluye la publicación de viajes, así que ningún conductor carga datos en el MVP. Por eso, el costo estimado y el tipo de recorrido que según el TP4-B indicaría el conductor al publicar entran como datos precargados de cada viaje, igual que el resto de los viajes que el TP3 decidió simular. El pasajero los ve y los usa como si un conductor los hubiera publicado. El costo se precarga con la fórmula de más abajo y no implica pagos: se arregla entre las personas.
+**Costo y tipo de recorrido del conductor.** El brief excluye la publicación de viajes, así que ningún conductor carga datos en el MVP. Por eso, el costo estimado y el tipo de recorrido que según el TP4-B indicaría el conductor al publicar entran como datos precargados de cada viaje, igual que el resto de los viajes que el TP3 decidió precargar. El pasajero los ve y los usa como si un conductor los hubiera publicado. El costo se precarga con la fórmula de más abajo y no implica pagos: se arregla entre las personas.
 
 **Componente propio (TP1): lógica de matching.** Muestra solo viajes de conductores verificados, con lugares libres, del mismo sentido y la misma localidad, y a una hora o menos del horario pedido. Pone primero a quienes cursan con el pasajero ese día, como pide la hipótesis, y después ordena con un puntaje de 0 a 100: horario (70), calificación (20) y experiencia (10).
 
 **Costo estimado:** km ÷ 15 km por litro × $2.300 por litro, dividido entre quienes viajan. Desde San Antonio de Padua, con el auto completo, da $540 por persona.
 
-**Qué se simula, como decidió el TP3:** la revisión del certificado (se aprueba a los 3 segundos), el envío del código (aparece en pantalla), 26 viajes y 6 conductores precargados con sus referencias y sus comisiones, la lista de 12 comisiones que reemplaza a SIU Guaraní, y la aceptación del conductor (a los 5 segundos).
+**Qué está precargado o automatizado en el MVP, como decidió el TP3:** la revisión del certificado (se aprueba a los 3 segundos), el envío del código (aparece en pantalla), 26 viajes y 6 conductores precargados con sus referencias y sus comisiones, la lista de 12 comisiones que reemplaza a SIU Guaraní, y la aceptación del conductor (a los 5 segundos).
 
 **Qué no se construyó, por estar excluido en el TP3:** publicación de viajes, mapas y rutas calculadas, integración con SIU Guaraní, reputación completa, pagos, chat, notificaciones y seguimiento.
 
@@ -78,10 +78,15 @@ UNLaM Carpool es una aplicación web para celular con el flujo del estudiante pa
 
 ### 3. Preparar la sesión
 
-**Tareas:**
+El plan completo está en `docs/evidencia/tp5/plan-de-sesion.md` y se escribió antes de las sesiones.
+
+**Tareas,** contadas como situaciones y sin nombrar botones:
 
 * **T1. Primer ingreso.** "Un compañero te pasó esta aplicación para compartir viajes con gente de la facu. Querés empezar a usarla."
-* **T2. Conseguir un viaje.** "Es [día de cursada]. Salís de cursar a las [hora de salida] y hay paro de colectivos. Tenés que volver a [localidad]. Conseguí cómo volver."
+* **T2. Conseguir un viaje.** Cada participante recibió una situación distinta, desde la localidad donde vive según el TP2:
+  * **U1, de ida a la tarde:** "Mañana salís de la oficina en San Antonio de Padua a las 17:30 y tenés clase en la UNLaM a las 18:30. Hay paro de colectivos. Conseguí cómo llegar a tiempo."
+  * **U2, de ida a la mañana temprano:** "Mañana tenés una clase de consulta a las 8:00 en la UNLaM. Salís de tu casa en Rafael Castillo a las 7:15 y el colectivo viene con demoras. Conseguí cómo llegar."
+  * **U3, de vuelta a la noche:** "Mañana salís de cursar a las 22:00 y hay paro de colectivos. Tenés que volver a tu casa en San Antonio de Padua. Conseguí cómo volver."
 * **T3. Decidir con quién.** "Si te quedaran dudas sobre con quién viajar, hacé lo que harías antes de decidirte. Decinos en voz alta con cuál te subirías y por qué." Solo si eligió muy rápido.
 * **T4. Cambio de planes.** "Te avisaron que se suspendió la clase y ya no vas a necesitar ese viaje."
 
@@ -90,11 +95,11 @@ UNLaM Carpool es una aplicación web para celular con el flujo del estudiante pa
 * Pausas de más de 5 segundos, vueltas atrás y lecturas repetidas.
 * Errores de validación y pantallas a las que no quería ir.
 * Pedidos de ayuda, anotados textuales y sin responder.
-* Si abre el perfil del conductor, cuánto tiempo se queda y qué mira.
+* Si abre la información del conductor antes de solicitar y qué mira.
 * Si carga su cursada, y si mira o menciona la etiqueta "Cursan juntos" al elegir.
 * Qué dice del precio, y si menciona la seguridad o la noche sin que se lo pregunten.
 
-**Cómo se registra:** una persona conduce y otra anota en una planilla por usuario: tareas, tiempos con cronómetro, puntos de fricción con severidad de 0 a 4, citas textuales y respuestas de cierre. Si el usuario queda trabado 3 minutos, se anota "rescate" y no suma en la tasa de solicitud.
+**Cómo se registra:** una persona conduce la sesión y otra anota en una planilla por usuario lo que hizo y dijo en cada tarea, los puntos de fricción y las respuestas de cierre. Nadie más interviene. Si el usuario queda trabado 3 minutos, se anota "rescate" y no suma en la tasa de solicitud. No se registran el nombre ni el contacto de los participantes.
 
 **Preguntas de cierre,** en este orden y sin mostrar la aplicación:
 
@@ -108,21 +113,19 @@ UNLaM Carpool es una aplicación web para celular con el flujo del estudiante pa
 
 ### 4. Probar con usuarios reales
 
-Se probó con U1, U2 y U3, los mismos usuarios del TP2. Las sesiones se simularon con autorización de la cátedra, a partir del perfil y las respuestas de cada uno en el TP2.
+Probaron el MVP U1, U2 y U3, los mismos usuarios del TP2. Cada uno lo recorrió solo, siguiendo el plan de sesión. Las planillas están en `docs/evidencia/tp5/` (`U1.md`, `U2.md` y `U3.md`).
 
-| Usuario | Perfil (TP2) | Fecha | Duración | Situación de T2 |
-| --- | --- | --- | --- | --- |
-| U1 | San Antonio de Padua, 14 km, 45 a 60 min, a veces en auto propio | 01/11/2026 | 20 min | Martes, sale a las 23:00 |
-| U2 | Rafael Castillo, 8 km, 15 a 30 min, vuelve caminando si falla el colectivo | 02/11/2026 | 14 min | Martes, sale a las 22:00 |
-| U3 | Padua Sur, 14 km, 45 a 60 min, toma remis si falla el transporte | 01/11/2026 | 23 min | Lunes, sale a las 22:00 |
+| Usuario | Perfil (TP2) | Situación de T2 |
+| --- | --- | --- |
+| U1 | San Antonio de Padua, 14 km, 45 a 60 min, a veces en auto propio | Ida, sale de la oficina a las 17:30, clase a las 18:30 |
+| U2 | Rafael Castillo, 8 km, 15 a 30 min, vuelve caminando si falla el colectivo | Ida, el jueves, sale a las 7:15, clase de consulta a las 8:00 |
+| U3 | San Antonio de Padua (Padua Sur), 14 km, 45 a 60 min, toma remis si falla el transporte | Vuelta, sale de cursar a las 22:00 |
 
-**U1.** Fue a buscar el código a su correo antes de verlo en pantalla y cargó 3 comisiones. En T2 eligió "Solo vuelta" y vio primero a Diego con la etiqueta "Cursan juntos": "¡Diego cursa Operativos conmigo!". Abrió su perfil (48 s), lo comparó con el de Juan y eligió a Diego, que sale a las 23:05: "31 viajes. Y mirá lo que dicen". Después de solicitar buscó en "Perfil" dónde ofrecer su auto. Lo usaría los martes y dejó contacto.
+**U1.** Antes de buscar cargó su cursada: Análisis Matemático I (lunes) e Ingeniería de Software (miércoles), las dos de noche. Buscó "Solo ida" para el día siguiente, un miércoles, a las 17:30. Primero apareció Juan Rodríguez, con la etiqueta "Cursan juntos · Ingeniería de Software". Se entusiasmó: dijo que capaz lo conocía y que, si hubiera tenido la aplicación antes, se habría ahorrado muchos viajes en colectivo. Pero ese viaje llegaba a las 19:00, así que lo descartó. Eligió a Diego Paz, que llegaba a las 18:25, aunque le preocupó el margen de 5 minutos y una referencia que mencionaba una demora de 5 minutos. Revisó los 31 viajes, la calificación de 4,6, los comentarios, el auto y la patente. Lo usaría todos los miércoles al salir de la oficina y dejó contacto.
 
-**U2.** Ingresó sin problemas, pero omitió la cursada: "Después lo pongo". En T2 dejó el día en "Hoy" (lunes) en lugar de martes y no lo notó. No vio ninguna etiqueta "Cursan juntos". Tocó el primer viaje, estuvo 8 segundos en el perfil de Bruno y solicitó: "Este, sale 22:10". Lo usaría "cuando hay paro o llueve", no un día fijo. Dejó contacto.
+**U2.** En el ingreso, el código en pantalla y los mensajes de validación le generaron dudas ("Revisá tu nombre" no le explicaba qué corregir). Buscó desde Rafael Castillo para el jueves a las 7:15. El campo de hora venía cargado con 22:45 y dudó si tenía que poner la hora de salida o la de llegada. Hubo un solo viaje, el de Valentina Sosa: salía a las 7:45 y llegaba a las 8:11, 11 minutos después de la consulta. Vio la llegada en el detalle y lo pidió igual porque era la única opción. Cargó su cursada (Álgebra, Programación I, Análisis Matemático I e Inglés), pero no coincidía con la de la conductora. Para cancelar buscó primero en la tarjeta de "Mis viajes". Lo usaría todos los jueves para Análisis Matemático I de las 8:00 y dejó su correo.
 
-**U3.** Preguntó "¿Me llegó al mail?", cargó 5 comisiones y dudó del certificado aprobado en 3 segundos. En T2 escribió "Padua Sur" y recibió un error; después buscó con "Solo ida" y no tuvo resultados. Corrigió ambas cosas y vio primero a Juan, con "Cursan juntos" (22:30), y después a Marina (22:15, mejor horario y calificación). Comparó los dos y eligió a Juan: "Marina sale antes y tiene mejores referencias, pero con Juan curso. Lo veo todos los lunes". Lo usaría los lunes y miércoles y dejó contacto.
-
-Las planillas completas están en el anexo.
+**U3.** El primer archivo del certificado dio "El archivo está vacío" y tuvo que elegir otra copia. Buscó "Solo vuelta" a Padua a las 22:00. Los dos resultados (22:15 y 22:30) mostraban en el listado el recorrido al revés, San Antonio de Padua → UNLaM, y tuvo que abrir cada detalle para confirmar que iban hacia su casa. Comparó los dos (5,0 con 8 viajes contra 4,8 con 15) y eligió el de las 22:15 para esperar menos. Se olvidó de cargar su cursada. Le sorprendió el precio: $540 contra los $8.000 que calcula para un Uber. Lo usaría para volver después de cursar, sobre todo con paro, pero no nombró un día ni dejó contacto.
 
 ## Parte 4 — Aprender
 
@@ -130,48 +133,56 @@ Las planillas completas están en el anexo.
 
 #### Capa de usabilidad
 
-**Los tres completaron el flujo sin rescate,** con fricción en el ingreso y en la búsqueda.
+**Los tres completaron el flujo de punta a punta sin rescate y sin pedir ayuda,** con fricción en el ingreso y en la búsqueda.
 
 | Tarea | U1 | U2 | U3 |
 | --- | --- | --- | --- |
-| T1. Primer ingreso | 4:20 | 2:20, sin cargar la cursada | 5:00 |
-| T2. Conseguir un viaje | 2:40 | 1:40, para el día equivocado | 4:30, con 2 errores |
-| T4. Cambio de planes | 0:50 | 0:35 | 1:05 |
+| T1. Primer ingreso | Completó | Completó con dificultad menor: validaciones del perfil | Completó con dificultad: "El archivo está vacío" |
+| T2. Conseguir un viaje | Completó | Completó con dificultad: hora precargada y viaje que llega tarde | Completó con dificultad: recorrido invertido en el listado |
+| T3. Decidir con quién | No hizo falta: comparó por su cuenta | Parcial: había un solo viaje | Completó: comparó dos conductores |
+| T4. Cambio de planes | Completó | Completó, después de buscar en la tarjeta | Completó |
 
 **Problemas que el TP4 había anticipado:**
 
-* **Volver y cancelar:** funcionó. U3 salió de una búsqueda vacía con "Volver" y los tres cancelaron en T4 con la confirmación previa.
-* **Sugerencias de ubicaciones:** funcionaron para U1 ("pad") y U2 ("rafa"), pero no para U3, que escribió su barrio, "Padua Sur", y recibió un error.
-* **Tipo de recorrido:** la opción existe, pero "Solo ida" viene elegida. U3 buscó la vuelta con "Solo ida" y no tuvo resultados.
-* **Acompañamiento en el primer uso:** U1 salió a buscar el código a su correo y U3 preguntó "¿Me llegó al mail?".
-* **Intercambiar origen y destino:** nadie lo usó; la vuelta se resolvió eligiendo el tipo de recorrido.
-* **Etiqueta de cursada:** U1 y U3 la vieron y la nombraron. Pero el paso para cargarla es opcional y U2 lo omitió ("eran un montón de materias para marcar"), y U3 preguntó "¿Y si mi comisión no está?". Es lo que anticipó el TP4-B: la etiqueta depende de conocer la cursada de cada uno.
+* **Volver y cancelar:** funcionó. Los tres cancelaron en T4 con la confirmación previa. U1 preguntó si tenía que avisarle al conductor y lo resolvió leyendo la pantalla.
+* **Tipo de recorrido:** U1 y U2 eligieron "Solo ida" y U3 "Solo vuelta" sin errores. Pero con "Solo vuelta" el listado muestra el recorrido al revés (ver problemas nuevos).
+* **Acompañamiento en el primer uso:** U1 y U2 dudaron de si el código les llegaba al correo o tenían que usar el que aparecía en pantalla. Los dos usaron el de la pantalla sin ayuda.
+* **Costo estimado:** se entendió. U1 y U2 dijeron que el precio estaba claro y que el pago lo arreglan con quien maneja, en efectivo o por transferencia. U3 quiere saber si el precio está actualizado y cuánto paga al final.
+* **Etiqueta de cursada:** U1 y U2 cargaron su cursada. U1 vio la etiqueta y la nombró; U2 no tenía coincidencias. U3 vio la invitación a cargarla y se olvidó. Como anticipó el TP4-B, la etiqueta depende de que cada uno cargue su cursada.
 
-**Problemas nuevos:**
+**Problemas nuevos,** de mayor a menor impacto:
 
-* **El día pasa desapercibido** (severidad 3): U2 pidió el viaje para el lunes cuando lo necesitaba el martes y no lo notó en la confirmación ni en el pase.
-* **La aprobación instantánea del certificado resta credibilidad** (severidad 3): U3 dijo "¿Lo revisó alguien en tres segundos?".
-* **"Ida y vuelta" en un resultado de vuelta confunde** (severidad 1): U1 lo preguntó y se resolvió en el detalle.
+1. **Con "Solo vuelta", el listado muestra el recorrido invertido.** U3 vio "San Antonio de Padua → UNLaM" en los dos resultados y tuvo que abrir cada detalle para confirmar la dirección. Es un error del MVP: la tarjeta y el resumen de búsqueda arman el recorrido desde la localidad aunque el viaje sea de vuelta.
+2. **La hora de llegada no sirve para buscar ni para elegir desde el listado.** La llegada estimada se ve recién en el detalle, no se puede buscar por "llegar antes de" y la aplicación no avisa cuando un viaje llega tarde. U1 abrió cada viaje para ver a qué hora llegaba. U2 pidió un viaje que llegaba 11 minutos después de su consulta. Los dos pidieron poder buscar por hora de llegada.
+3. **La hora de ida viene cargada con un valor que no corresponde.** U2 encontró 22:45 en el campo de una búsqueda a la mañana y dudó si tenía que poner la hora de salida o la de llegada.
+4. **Mensajes de error que no dicen qué corregir.** "Revisá tu nombre" (U2) y "El archivo está vacío" con un archivo válido (U3).
+5. **La revisión del certificado no muestra progreso.** U2 esperó unos 8 segundos sin indicador, y U1 preguntó cuánto tardaba porque, saliendo de la oficina, necesitaba buscar enseguida.
+6. **Cancelar está solo en el pase.** U2 lo buscó primero en la tarjeta de "Mis viajes".
+7. **Detalles del pase:** la patente aparecía partida entre "ARGENTINA" y "AF126LP", y la pestaña "Mi cursada" dejó de verse (U2).
+
+El equipo anotó además, en la sesión de U2, tres detalles de implementación: la dirección queda en `#/buscar` durante el ingreso, el texto de ayuda dice "Tocá la tarjeta" mientras el enlace dice "Abrir pase", y "Ver viaje" y "Quiero este viaje" están hechos como enlaces, lo que conviene revisar por accesibilidad.
 
 #### Capa de negocio
 
 | Métrica | U1 | U2 | U3 | Total |
 | --- | --- | --- | --- | --- |
-| 1. Tasa de solicitud | Sí | No, pidió el día equivocado | Sí | 67 % |
-| 2. Tasa de reemplazo | Sí | No, "cuando hay paro o llueve" | Sí | 67 % |
+| 1. Tasa de solicitud | Sí | Sí | Sí | 100 % |
+| 2. Tasa de reemplazo | Sí: todos los miércoles, dejó contacto | Sí: todos los jueves, dejó contacto | No: lo usaría con paro, sin día ni contacto | 67 % |
 | Vanidosa: usuarios registrados | Sí | Sí | Sí | 100 % |
 
-**Contra el criterio de éxito: la hipótesis se sostiene.** Las dos tasas llegan al 67 %. La métrica vanidosa dio 100 % e incluye a U2, que no reemplazaría ningún viaje.
+**Contra el criterio de éxito: la hipótesis se sostiene.** La tasa de solicitud es de 100 % y la de reemplazo, de 67 %. Las dos llegan al umbral de 2 de 3. La métrica vanidosa dio 100 % e incluye a U3, que no reemplazaría ningún viaje.
 
-**El producto genera el valor prometido para quienes viajan 45 minutos o más.** U1 y U3 eligieron un día concreto y lo compararon con lo que hacen hoy cuando falla el transporte: el auto del padre y el remis.
+**El reemplazo aparece en viajes semanales con hora de llegada fija.** Los dos usuarios que suman eligieron un viaje que hacen todas las semanas y en el que llegar a horario importa: U1, de la oficina a la facultad los miércoles, con clase a las 18:30; U2, los jueves a las 8:00, porque el colectivo suele venir lleno o con demoras. Es el problema del TP2 —la espera y la imprevisibilidad del transporte— en un horario que no es la noche.
 
-**Resuelve el problema real del TP2:** la espera y la imprevisibilidad de noche. U1 eligió el martes porque "el tren a esa hora tarda un montón", y U3 el lunes y el miércoles porque "el colectivo a esa hora es una lotería".
+**Para la vuelta nocturna fue un respaldo.** U3 la usaría para volver después de cursar, sobre todo con paro o cuando tiene que esperar mucho el colectivo, y no se comprometió con un día. Hoy, ante un paro, pediría un Uber.
 
-**Para viajes cortos es un respaldo, no un reemplazo.** U2, a 8 km y 20 minutos, lo usaría "cuando hay paro o llueve" y eligió solo por horario.
+**El horario decide; la cursada y las referencias acompañan.** Los tres eligieron primero por horario: U1 descartó al conductor con quien cursaba porque llegaba tarde, U2 tomó el único viaje que había y U3 eligió el viaje con el que esperaba menos. Después miraron la calificación, la cantidad de viajes, las referencias y la patente; U2 y U3 también la verificación. Los tres dijeron que no se subirían si la persona o la patente no coinciden con lo publicado.
 
-**La prioridad por cursada genera confianza, como promete la hipótesis.** A U1 le confirmó una elección que ya era la mejor por horario. A U3 se la cambió: eligió a Juan, que cursa con su comisión y sale 30 minutos después, antes que a Marina, con mejor horario y calificación. "Si lo veo en clase, ya no es un desconocido." Para U2 no hay dato, porque omitió la cursada.
+**La prioridad por cursada generó interés, pero no cambió ninguna elección.** U1 se entusiasmó al ver que compartía cursada con un conductor y dijo que le hubiera gustado tener la aplicación antes. Pero lo descartó por horario. U2 no tenía coincidencias y U3 no cargó la cursada.
 
-**Las referencias también pesaron en los viajes largos.** U1 y U3 compararon dos conductores y nombraron la verificación, las referencias y la cantidad de viajes.
+**El costo no frenó a nadie.** U1 y U2 lo vieron claro y accesible; U3 lo comparó con los $8.000 de un Uber.
+
+**Con pocos viajes, la coincidencia falla.** U2 tuvo una sola opción y llegaba tarde. Es lo que pone en duda el supuesto 6, aunque acá los viajes eran precargados.
 
 **Queda sin evaluar** la existencia de conductores, porque los viajes estaban precargados.
 
@@ -179,27 +190,27 @@ Las planillas completas están en el anexo.
 
 **Perseverar.**
 
-El criterio de éxito se cumple en las dos métricas. U1 y U3 reproducen el problema central del TP2 con un día concreto de su semana, y eligieron por la cursada compartida y las referencias, no solo por el horario. El caso de U2 muestra que el valor se concentra en los viajes largos; es un solo caso y lo tomamos como señal a seguir sobre el segmento, no como motivo para pivotar.
+El criterio de éxito se cumple en las dos métricas. U1 y U2 nombraron un viaje concreto de su semana que hoy hacen en colectivo y dejaron un contacto para que les avisemos. U3 confirma el valor como respaldo, pero no como reemplazo. El aprendizaje no cambia la dirección del producto, pero sí su foco: el valor está en cumplir con la hora de llegada, más que en la cursada compartida.
 
 **Lo próximo a construir:**
 
-1. **Publicación de viajes por conductores.** Es el supuesto crítico desde el TP1 y sigue sin evidencia, porque todos los viajes eran precargados. U1, la única que maneja, buscó por su cuenta dónde ofrecer su auto.
-2. **Correcciones de esta prueba:** tipo de recorrido sin opción elegida de antemano, día más visible en la búsqueda y la confirmación, barrios como "Padua Sur" en las sugerencias y aviso claro de dónde llega el código.
-3. **Revisión del certificado con plazo y aviso,** en lugar de la aprobación en 3 segundos.
-4. **Cursada cargada sin esfuerzo:** traerla de SIU Guaraní o, mientras tanto, buscar la comisión escribiendo su nombre. U2 omitió el paso y U3 dudó de encontrar la suya.
+1. **Publicación de viajes por conductores.** Es el supuesto crítico desde el TP1 y sigue sin evidencia, porque todos los viajes eran precargados. Hay que ver si aparecen conductores en los horarios que nombraron: los miércoles a las 17:30 desde Padua y los jueves cerca de las 7:00 desde Rafael Castillo.
+2. **Buscar y elegir por hora de llegada:** buscar por "llegar antes de", mostrar la llegada en el listado y avisar cuando un viaje llega después del horario pedido.
+3. **Ordenar primero por compatibilidad de horario y después por cursada,** para que un viaje que llega tarde no aparezca primero aunque compartan cursada (ver punto 9).
+4. **Correcciones de esta prueba:** recorrido correcto en "Solo vuelta", hora de búsqueda sin un valor precargado que no corresponde, mensajes de error que digan qué corregir, progreso visible en la revisión del certificado y cancelar desde la tarjeta de "Mis viajes".
 
-**Qué cambiaría la decisión:** si al abrir la publicación no aparecen conductores para la cursada nocturna, correspondería un pivote de necesidad del consumidor: una alternativa para días de paro y demoras, el uso que valoró U2.
+**Qué cambiaría la decisión:** si al abrir la publicación no aparecen conductores en esos horarios, correspondería un pivote de necesidad del consumidor: una alternativa para días de paro y demoras, el uso que valoró U3.
 
 ### 7. Brief de Producto — versión 4
 
 `docs/brief.md` abre con este párrafo de cambios respecto de la versión 3:
 
-> Se construye el MVP con el scope del TP3, solo el flujo del pasajero, y las 8 correcciones que el equipo aceptó en el TP4-B, incluida la etiqueta de coincidencia con la cursada, que prioriza a quienes cursan juntos como pide la hipótesis. El costo estimado y el tipo de recorrido que indicaría el conductor entran como datos precargados de cada viaje, porque la publicación y los pagos siguen excluidos. El costo se calcula con nafta a $2.300 por litro y un consumo de 15 km por litro. Se definen las métricas y el criterio de éxito, reformulados después como dos tasas simples, y se prueba el MVP con U1, U2 y U3, en sesiones simuladas a partir del TP2 con autorización de la cátedra. La hipótesis se sostiene: la tasa de solicitud y la tasa de reemplazo llegan al 67 %, y la cursada compartida pesó en la elección. El valor se concentra en quienes viajan 45 minutos o más; para quien vive cerca, el producto es un respaldo cuando falla el transporte. El equipo decide perseverar y lo próximo es validar la oferta de conductores, que sigue siendo el supuesto crítico.
+> Se construye el MVP con el scope del TP3, solo el flujo del pasajero, y las 8 correcciones que el equipo aceptó en el TP4-B, incluida la etiqueta de coincidencia con la cursada. El costo estimado y el tipo de recorrido que indicaría el conductor entran como datos precargados de cada viaje, porque la publicación y los pagos siguen excluidos. El costo se calcula con nafta a $2.300 por litro y un consumo de 15 km por litro. Se definen las métricas y el criterio de éxito antes de probar, y se prueba el MVP con U1, U2 y U3, usuarios reales del segmento que lo recorrieron sin ayuda. **La hipótesis se sostiene:** la tasa de solicitud es de 100 % y la de reemplazo, de 67 %. El reemplazo aparece en viajes semanales con hora de llegada fija; para la vuelta nocturna, el producto es un respaldo. El horario decide la elección: la cursada compartida genera interés, pero no cambió ninguna elección. **El equipo decide perseverar** y lo próximo es validar la oferta de conductores, que sigue siendo el supuesto crítico, y permitir buscar y elegir por hora de llegada.
 
 **Incorpora:**
 
-* **Lo aprendido:** el reemplazo funciona en viajes largos y es respaldo en los cortos; la cursada compartida y las referencias pesan en la decisión; la verificación tiene que verse real; U1 quiere ofrecer su auto; el costo no frenó a nadie; y los cuatro problemas de usabilidad del punto 5.
-* **El estado de la hipótesis:** se sostiene, incluida la prioridad por cursada, pero sin evaluar la oferta de conductores. El supuesto 2 queda confirmado con matiz (reemplazo en viajes largos, respaldo en cortos); el 4, confirmado si la revisión se percibe real; el 1 y el 6 siguen sin evidencia.
+* **Lo aprendido:** el reemplazo aparece en viajes semanales con hora de llegada fija y es respaldo en la vuelta nocturna; el horario decide y la cursada y las referencias acompañan; el costo no frenó a nadie; y los problemas de usabilidad del punto 5.
+* **El estado de la hipótesis:** se sostiene, sin evaluar la oferta de conductores. La prioridad por cursada no se confirmó como motivo de elección. El supuesto 2 queda confirmado; el 3, confirmado con la condición de comprobar persona y patente; el 4 y el 5, confirmados; el 1 y el 6 siguen sin evidencia.
 * **La decisión:** perseverar, con lo próximo a construir del punto 6.
 
 ## Parte 5 — Fundamentación
@@ -208,40 +219,38 @@ El criterio de éxito se cumple en las dos métricas. U1 y U3 reproducen el prob
 
 | Conclusión | Observación que la sostiene |
 | --- | --- |
-| El flujo se completa sin rescate | Los tres llegaron al pase y cancelaron en T4 sin ayuda |
-| El primer ingreso tiene fricción con el código | U1 salió a su correo durante 25 segundos. U3 preguntó "¿Me llegó al mail?" y tardó 40 segundos en ver la notificación |
-| "Solo ida" elegido de antemano induce errores | U3, en T2, buscó la vuelta a las 22:00 con "Solo ida" y vio "No hay viajes para esa búsqueda" |
-| Las sugerencias no cubren cómo nombran su barrio | U3, en T2, escribió "Padua Sur", no tuvo sugerencias y recibió "Elegí una localidad de la lista" |
-| El día pasa desapercibido | U2, en T2, dejó "Hoy" y pidió el viaje del lunes cuando se le había dicho martes. Al cierre: "Ah, ni lo miré" |
-| Las referencias pesan en viajes largos | U1 estuvo 48 segundos en el perfil de Diego: "31 viajes. Y mirá lo que dicen". U3 estuvo 1 minuto en el de Juan: "Tiene la tilde de verificado y 15 viajes. No es un perfil trucho" |
-| La cursada compartida pesa más que el horario | U3 eligió a Juan (22:30, "Cursan juntos") antes que a Marina (22:15, calificación 5): "Marina sale antes y tiene mejores referencias, pero con Juan curso" |
-| La etiqueta depende de que carguen la cursada | U2 tocó "Omitir por ahora" en T1 y nunca vio la etiqueta. U3 preguntó "¿Y si mi comisión no está?" |
-| En viajes cortos decide el horario | U2 eligió en menos de 10 segundos, estuvo 8 en el perfil y respondió "Por el horario. Salía 22:10" |
-| El producto reemplaza un viaje real para U1 y U3 | U1: "Los martes, que salgo a las 23". U3: "Los lunes y los miércoles". Los dos dejaron contacto |
-| Para U2 es respaldo, no reemplazo | U2: "Un día fijo no. Lo usaría cuando hay paro o llueve" |
-| Hay al menos un conductor interesado | U1, después de solicitar, pasó 1 minuto en "Perfil" y "Mis viajes": "¿Y dónde pongo que yo también tengo auto?" |
+| El flujo se completa sin ayuda | Los tres llegaron a la confirmación y cancelaron en T4 sin rescate ni pedidos de ayuda |
+| El primer ingreso tiene fricción | U1 y U2 dudaron de dónde llegaba el código. U2 recibió "Revisá tu nombre" sin saber qué corregir. A U3 el primer archivo le dio "El archivo está vacío" |
+| "Solo vuelta" muestra el recorrido invertido | U3 vio "San Antonio de Padua → UNLaM" en los dos resultados de su vuelta y abrió cada detalle para confirmar la dirección |
+| La hora de llegada no ayuda a elegir | U1 abrió cada viaje para ver la llegada. U2 pidió un viaje que llegaba 11 minutos después de su consulta. Los dos pidieron buscar por hora de llegada |
+| El horario decide | U1 descartó a Juan Rodríguez por llegar a las 19:00 y eligió a Diego, que llegaba a las 18:25. U3 eligió el viaje de las 22:15 para esperar menos |
+| La cursada genera interés, pero no decide | U1 se entusiasmó con la etiqueta "Cursan juntos" en el viaje de Juan Rodríguez y lo descartó igual por horario |
+| Las referencias y la patente pesan en la confianza | U1 revisó los 31 viajes, los comentarios y la patente de Diego, y le preocupó una referencia por una demora. Los tres dijeron que no se subirían si la patente no coincide |
+| El costo no es una barrera | U1 y U2: el precio estaba claro y el pago lo arreglan con quien maneja. U3 lo comparó con los $8.000 de un Uber |
+| El producto reemplaza un viaje semanal para U1 y U2 | U1: todos los miércoles, de la oficina a la facultad. U2: todos los jueves, para Análisis Matemático I de las 8:00. Los dos dejaron contacto |
+| Para la vuelta nocturna es respaldo | U3 lo usaría sobre todo con paro y no nombró un día ni dejó contacto |
 
 ### 9. El resultado que no esperaban
 
-**Qué pasó.** En la sesión de U3, al final de T1, el certificado se aprobó a los 3 segundos de enviarlo. U3 se detuvo y dijo: "¿Ya está? ¿Lo revisó alguien en tres segundos? Entonces cualquiera sube cualquier cosa."
+**Qué pasó.** En la sesión de U1, la aplicación puso primero el viaje de Juan Rodríguez, con la etiqueta "Cursan juntos · Ingeniería de Software". U1 se entusiasmó: dijo que capaz lo conocía y que, si hubiera tenido la aplicación antes, se habría ahorrado muchos viajes en colectivo. Pero ese viaje llegaba a las 19:00 y su clase empezaba a las 18:30. Lo descartó y eligió a Diego, que no compartía su cursada.
 
-**Por qué nos sorprendió.** La verificación es la base de la confianza que promete la hipótesis. Esperábamos que la velocidad se viviera como algo bueno; para U3 fue al revés: una revisión instantánea parece que no revisa nada.
+**Por qué nos sorprendió.** La hipótesis promete priorizar a quienes comparten cursada, y el MVP los pone primeros en el listado. Esperábamos que la etiqueta inclinara la elección, como pedía U1 en el TP2. Fue al revés: la cursada compartida generó la reacción más entusiasta de la prueba, pero no pudo competir con la hora de llegada. Y al ordenar primero por cursada, la aplicación puso arriba un viaje que no le servía.
 
 **Qué hicimos con eso:**
 
-* **No cambiamos el MVP entre sesiones,** para que U2 viera lo mismo. En su sesión miramos ese momento con atención: no lo comentó.
-* **Lo contamos según las reglas.** En T2, U3 eligió a Juan, entre otras cosas, porque "tiene la tilde de verificado": dijo una cosa e hizo otra, y vale lo que hizo. La duda quedó registrada como hallazgo.
-* **Lo llevamos a la próxima versión:** la revisión del certificado va a tener plazo y aviso. En la verificación conviene ser creíble antes que rápido, aunque el TP3 priorizó la eficiencia.
-* **Lo usamos para el punto 10:** muestra que en la prueba se puede pedir un lugar sin confiar de verdad en el conductor.
+* **Lo contamos según las reglas.** U1 dijo que le entusiasmaba viajar con alguien de su cursada e hizo otra cosa: eligió por horario. Vale lo que hizo, así que la cursada no figura como motivo de elección en la capa de negocio.
+* **Lo llevamos a la próxima versión:** el orden del listado va a poner primero los viajes compatibles con la hora de llegada, y entre esos, a quienes comparten cursada.
+* **Lo usamos para el punto 10:** muestra que la intención que expresa el usuario y lo que elige pueden ser distintas.
 
 ### 10. La métrica que podría estar mintiendo
 
-**La tasa de solicitud.** Dio 67 %, pero en esta prueba pedir un lugar no cuesta nada:
+**La tasa de solicitud.** Dio 100 %, pero en esta prueba pedir un lugar no cuesta nada:
 
-* **Siempre hay un viaje que coincide:** los viajes y las comisiones se precargaron para las zonas, los horarios y la cursada de U1, U2 y U3. Encontrar uno no demuestra que habría viajes reales a las 23 desde Padua.
-* **Nadie se sube a un auto:** tocar "Solicitar lugar" no exige esperar de noche ni subirse con un desconocido. U3 dudó de la verificación y pidió el lugar igual.
+* **Se puede pedir un viaje que no sirve:** U2 pidió el viaje de las 7:45 sabiendo que llegaba 11 minutos después de su consulta, porque era la única opción. Suma en la métrica, aunque en la vida real tal vez no lo habría pedido.
+* **Siempre hay un viaje que coincide:** los viajes y las comisiones se precargaron para las zonas y los horarios de U1, U2 y U3. Encontrar uno no demuestra que habría viajes reales los miércoles a las 17:30 desde Padua.
+* **Nadie se sube a un auto:** tocar "Quiero este viaje" no exige esperar ni subirse con un desconocido.
 * **Todos los conductores son buenos:** todas las referencias tienen 4 o 5 estrellas y todos están verificados. Nadie tuvo que decidir frente a un perfil débil.
 
 Podría dar 100 % aunque, en la vida real, nadie se subiera. La tasa de reemplazo es más difícil de engañar, porque pide nombrar un viaje concreto y dejar un contacto, aunque sigue siendo intención y no conducta.
 
-**Cómo lo revisaríamos:** con conductores reales, medir cuántos se suben al auto después de solicitar; y en la próxima prueba, incluir un conductor sin viajes o con una referencia negativa en el mismo horario, para ver si lo eligen igual.
+**Cómo lo revisaríamos:** contar solo las solicitudes de viajes que llegan a horario; con conductores reales, medir cuántos se suben al auto después de solicitar; y en la próxima prueba, incluir un conductor sin viajes o con una referencia negativa en el mismo horario, para ver si lo eligen igual.

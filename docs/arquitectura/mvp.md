@@ -16,7 +16,7 @@
 | Sección "Mis viajes" | Herramienta (Claude), a partir del TP4-B | El TP4-B pide cancelar desde el detalle del viaje y separar buscar de consultar viajes activos |
 | Incluir la etiqueta de cursada en el MVP | Equipo | La hipótesis prioriza a quienes comparten cursada y es una corrección aceptada del TP4-B |
 | Carrera elegida de una lista, y cursada cargada en la sección "Mi cursada" del menú: materia de esa carrera, comisión y un turno (mañana, tarde o noche), con un botón para agregar más materias | Equipo | Sin carrera ni materias no se puede saber si dos estudiantes cursan juntos |
-| Comisiones precargadas con código por día (1900 lunes, 2900 martes, hasta 5900 viernes); cada materia se dicta solo algunos días | Equipo | Simula la oferta de comisiones, porque el TP3 excluye SIU Guaraní |
+| Comisiones precargadas con código por día (1900 lunes, 2900 martes, hasta 5900 viernes); cada materia se dicta solo algunos días | Equipo | Reemplaza con datos precargados la oferta de comisiones, porque el TP3 excluye SIU Guaraní |
 | Prioridad absoluta en el listado para quien cursa con el pasajero | Herramienta (Claude), a revisar por el equipo | Sigue lo que dice la hipótesis |
 | Diseño adaptable: navegación abajo en el celular y arriba en la computadora | Equipo | El MVP se abre desde el celular y desde la página web |
 
@@ -35,7 +35,7 @@ src/
       verificacion.js Correo, certificado, código y permisos
       recorrido.js    Validación de la búsqueda
       localidades.js  Localidades y distancias precargadas
-    data.js           Conductores y viajes ficticios
+    data.js           Conductores y viajes precargados
     store.js          Estado, persistencia y registro de eventos
     router.js         Navegación y control de acceso
     views/            Pantallas
@@ -49,16 +49,16 @@ El componente propio definido en el TP1 es la lógica de matching y gestión de 
 
 **Ordena** primero los viajes de quienes cursan con el pasajero el día del viaje (misma materia, comisión y turno) y después por un puntaje de 0 a 100: horario (70), calificación (20) y experiencia (10). La confianza pesa menos porque todos los conductores ya están verificados.
 
-## Qué se construye y qué se simula
+## Qué se construye y qué es automático o precargado
 
-| Elemento | Funciona de verdad | Se simula |
+| Elemento | Funciona de verdad | Automático o precargado |
 | --- | --- | --- |
 | Correo institucional | Validación del dominio, código, vencimiento e intentos | El envío del correo: el código aparece como notificación en pantalla |
-| Certificado | Tipo, tamaño y bloqueo de pantallas | La revisión. Se aprueba sola a los 3 segundos. El archivo no se guarda ni sale del navegador |
+| Certificado | Tipo, tamaño y bloqueo de pantallas | La revisión es automática: se aprueba sola a los 3 segundos. El archivo no se guarda ni sale del navegador |
 | Búsqueda y matching | Todo | Los viajes están precargados y las distancias son aproximadas |
-| Detalle y referencias | Se muestran | Personas, autos, historial y comentarios ficticios |
+| Detalle y referencias | Se muestran | Personas, autos, historial y comentarios precargados |
 | Cursada | Carrera, carga de materias, comisiones y turnos, etiqueta y prioridad | Las listas de carreras, materias y comisiones, y la cursada de los conductores |
-| Solicitud | Lugares, duplicados y cancelación | La aceptación del conductor, a los 5 segundos |
+| Solicitud | Lugares, duplicados y cancelación | La aceptación del conductor es automática, a los 5 segundos |
 
 ## Límite de seguridad
 

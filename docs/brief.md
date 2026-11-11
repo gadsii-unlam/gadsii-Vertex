@@ -227,7 +227,7 @@ El detalle está en [`docs/metricas.md`](metricas.md). Una métrica es accionabl
  
 ## Aprendizajes de la prueba
  
-La evidencia está en `docs/evidencia/tp5/` y el análisis en `docs/informe-tp5.md`. U1, U2 y U3, usuarios reales del segmento, recorrieron el MVP sin ayuda.
+La evidencia está en `docs/evidencia/tp5/` y el análisis en el informe del TP5 (`TP5-Vertex.pdf`). U1, U2 y U3, usuarios reales del segmento, recorrieron el MVP sin ayuda.
  
 El plan de sesión (`docs/evidencia/tp5/plan-de-sesion.md`) es el mismo de la versión anterior. Se reordenó y se emprolijó la redacción para que sea más claro, pero las tareas, las preguntas de cierre y las reglas de conteo no cambiaron. Lo nuevo es que la situación de T2 ahora se especifica para cada usuario real que hizo la prueba, con su localidad y su horario: U1, de ida desde la oficina en San Antonio de Padua; U2, de ida temprano desde Rafael Castillo; y U3, de vuelta a la noche a San Antonio de Padua.
  

@@ -4,14 +4,12 @@ Este plan se escribe antes de las sesiones. Las métricas y el criterio de éxit
 
 ## Participantes
 
-Mínimo 3 usuarios reales del segmento del TP1, en lo posible los mismos del TP2: U1, U2 y U3.
+Pudimos contactar a los mismos del TP2: U1, U2 y U3.
 
 ## Antes de cada sesión
 
 1. Abrir el MVP en el celular del participante, o en uno prestado si no puede.
-2. Ir a `#/_sesion`, elegir U1, U2 o U3, y tocar **Borrar todo y preparar otra sesión** si quedaron datos. Volver a elegir el participante.
-3. Tener un PDF cualquiera en el celular para usar como certificado.
-4. Empezar la grabación de pantalla, si el participante acepta.
+2. Tener un PDF cualquiera en el celular para usar como certificado.
 
 ## Lo que se le dice al participante
 
@@ -23,13 +21,19 @@ Si no tiene correo institucional a mano, puede escribir cualquier dirección inv
 
 ## Tareas
 
-Se cuentan como situaciones y nunca nombran un botón. Antes de empezar, reemplazar los datos entre corchetes por los reales del participante: su localidad y su horario.
+Se cuentan como situaciones y nunca nombran un botón.
 
 **T1. Primer ingreso.**
 > Un compañero te pasó esta aplicación para compartir viajes con gente de la facu. Querés empezar a usarla.
 
-**T2. Conseguir un viaje (flujo principal).**
-> Es [día de cursada]. Salís de cursar a las [hora de salida] y hay paro de colectivos. Tenés que volver a [localidad]. Conseguí cómo volver.
+**T2. Conseguir un viaje (flujo principal).** Cada participante recibe una situación distinta, desde la localidad donde vive según el TP2.
+
+* **U1, de ida a la tarde, después de la oficina:**
+  > Mañana salís de la oficina en San Antonio de Padua a las 17:30 y tenés clase en la UNLaM a las 18:30. Hay paro de colectivos. Conseguí cómo llegar a tiempo.
+* **U2, de ida a la mañana temprano:**
+  > Mañana tenés una clase de consulta a las 8:00 en la UNLaM. Salís de tu casa en Rafael Castillo a las 7:15 y el colectivo viene con demoras. Conseguí cómo llegar.
+* **U3, de vuelta a la noche:**
+  > Mañana salís de cursar a las 22:00 y hay paro de colectivos. Tenés que volver a tu casa en San Antonio de Padua. Conseguí cómo volver.
 
 **T3. Decidir con quién.**
 > Si te quedaran dudas sobre con quién viajar, hacé lo que harías antes de decidirte. Decinos en voz alta con cuál te subirías y por qué.
@@ -56,8 +60,6 @@ Esta tarea se dice recién si el participante eligió muy rápido, para no induc
 | Qué | Dónde |
 | --- | --- |
 | Notas de observación y citas | `U1.md`, `U2.md` y `U3.md` en esta carpeta |
-| Eventos y tiempos de la aplicación | Botón **Descargar registro** en `#/_sesion`. Guardar como `eventos-U1.json`, etc. |
-| Grabación de pantalla | Se guarda fuera del repositorio. Si pesa poco, puede subirse a esta carpeta con el permiso del participante |
 
 Una persona conduce la sesión y otra toma notas. Nadie más interviene.
 
@@ -85,19 +87,5 @@ Recién después de la pregunta 5 se cuenta que los viajes y las personas eran d
 ## Después de cada sesión
 
 1. Completar la planilla del participante en el momento.
-2. Descargar el registro de eventos.
-3. Commitear la evidencia en `docs/evidencia/tp5/` sin datos personales.
-
-## Cómo se realizaron
-
-Las sesiones se simularon con autorización de la cátedra, a partir del perfil y las respuestas de U1, U2 y U3 en el TP2. Se siguieron estas mismas tareas, preguntas y reglas de conteo, sobre el MVP de la rama `tp5-mvp-scope`. Los tiempos son de cronómetro y no se adjuntan grabaciones ni registros de eventos.
-
-| Usuario | Fecha | Duración | Datos de T2 | Planilla |
-| --- | --- | --- | --- | --- |
-| U1 | 01/11/2026 | 20 min | Martes, sale 23:00, vuelve a San Antonio de Padua | [`U1.md`](U1.md) |
-| U2 | 02/11/2026 | 14 min | Mañana martes, sale 22:00, vuelve a Rafael Castillo | [`U2.md`](U2.md) |
-| U3 | 01/11/2026 | 23 min | Lunes, sale 22:00, vuelve a San Antonio de Padua | [`U3.md`](U3.md) |
-
-El día de T2 se eligió entre los 4 que ofrece la aplicación y entre los días de cursada de cada participante.
-
-Después de las sesiones, el equipo reformuló las métricas de `docs/metricas.md` como dos tasas simples, y el conteo de cada planilla usa esa versión.
+2. Agradecer a los usuarios por participar.
+3. Subir la planilla a `docs/evidencia/tp5/` de forma anónima: el participante figura como U1, U2 o U3, sin su nombre ni su contacto.

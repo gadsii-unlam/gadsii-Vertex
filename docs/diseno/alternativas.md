@@ -58,7 +58,7 @@
 
 6. **Pantalla de Solicitud con Confirmación Explícita** — Confirmación doble. Resumen de lo que está a punto de hacer. Botón "Solicitar" y botón "Cancelar" igualmente visibles. Texto claro: "Al solicitar confirmas que viajarás con [Nombre del Conductor]".
 
-7. **Pantalla de Solicitud Exitosa con Opciones Reversibles** — Confirmación con opciones. Solicitud confirmada. Botón "Cambiar de opinión" (cancela la solicitud). Datos del conductor y del viaje. Opción de contactar al conductor (chat simulado en MVP).
+7. **Pantalla de Solicitud Exitosa con Opciones Reversibles** — Confirmación con opciones. Solicitud confirmada. Botón "Cambiar de opinión" (cancela la solicitud). Datos del conductor y del viaje. Opción de contactar al conductor (no incluido en el MVP).
 
 **Por qué optimiza prevención de errores:** Validaciones en cada paso evitan datos incompletos o inválidos. Confirmaciones explícitas antes de comprometerse. Información es revisada antes de actuar. Valores por defecto seguros (ordena por confiabilidad, no por primera opción). Acciones reversibles (cambiar de opinión). Especialmente útil para usuarios nocturnos preocupados por seguridad.
 
